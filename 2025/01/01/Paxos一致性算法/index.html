@@ -1,0 +1,772 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <title>
+    Paxos一致性算法 |
+    
+    Luv Read Union
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic%7CUbuntu%20Mono:400,400italic,700,700italic&display=swap&subset=latin,latin-ext" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="/css/loader.css">
+
+  <meta name="description" content="开场白 水了那么久的博客，这次来点稍微硬核的吧。 来读一下Leslie Lamport 的论文《Paxos Made Simple》。 全程坚持读下来，我能保证读者明白什么是Paxos。 开干！ (～￣▽￣)～  Paxos算法注解  参阅 Leslie Lamport 的论文《Paxos Made Simple》。   三类角色  proposers acceptors learners">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Paxos一致性算法">
+<meta property="og:url" content="https://luvreadunion.com/2025/01/01/Paxos%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Luv Read Union">
+<meta property="og:description" content="开场白 水了那么久的博客，这次来点稍微硬核的吧。 来读一下Leslie Lamport 的论文《Paxos Made Simple》。 全程坚持读下来，我能保证读者明白什么是Paxos。 开干！ (～￣▽￣)～  Paxos算法注解  参阅 Leslie Lamport 的论文《Paxos Made Simple》。   三类角色  proposers acceptors learners">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-01-01T11:20:02.000Z">
+<meta property="article:modified_time" content="2025-01-17T04:33:09.742Z">
+<meta property="article:author" content="Luv">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="分布式系统">
+<meta property="article:tag" content="Paxos">
+<meta property="article:tag" content="硬核">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Luv Read Union" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/typeface-source-code-pro@1.1.13/index.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/katex@0.16.9/dist/katex.min.css">
+
+  
+  
+  
+  
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/wowjs@1.1.3/css/libs/animate.css">
+
+    
+<script src="https://npm.webcache.cn/wowjs@1.1.3/dist/wow.min.js"></script>
+
+    <script>
+      new WOW({
+        offset: 0,
+        mobile: true,
+        live: false
+      }).init();
+    </script>
+  
+  
+    <script src="/sw.js"></script>
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg"></div>
+    <div class="loading-right-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff6e6b" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z" fill="#fd0d00" />
+          <path d="M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95" fill="#fd0d00" />
+        </svg>
+      </div>
+      <div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    const startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    const endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('load', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/images/94011406.webp" alt="Paxos一致性算法">
+  
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <div id="logo-wrap">
+        
+          
+          
+            <a href="/" id="logo">
+              <h1>Paxos一致性算法</h1>
+            </a>
+          
+        
+      </div>
+      
+        
+        <h2 id="subtitle-wrap">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content" class="outer">
+          
+          <section id="main"><article id="post-Paxos一致性算法" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner">
+    <div class="article-meta">
+      <div class="article-date wow slideInLeft">
+  <a href="/2025/01/01/Paxos%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/" class="article-date-link">
+    <time datetime="2025-01-01T11:20:02.000Z" itemprop="datePublished">2025-01-01</time>
+  </a>
+</div>
+
+      
+  <div class="article-category wow slideInLeft">
+    <a class="article-category-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/">分布式系统</a><a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="开场白"><a class="markdownIt-Anchor" href="#开场白"></a> 开场白</h1>
+<p>水了那么久的博客，这次来点稍微硬核的吧。</p>
+<p>来读一下<strong>Leslie Lamport</strong> 的论文《<strong>Paxos Made Simple</strong>》。</p>
+<p>全程坚持读下来，我能保证读者明白什么是<strong>Paxos</strong>。</p>
+<p>开干！</p>
+<p>(～￣▽￣)～</p>
+<h1 id="paxos算法注解"><a class="markdownIt-Anchor" href="#paxos算法注解"></a> Paxos算法注解</h1>
+<blockquote>
+<p>参阅 <strong>Leslie Lamport</strong> 的论文《<strong>Paxos Made Simple</strong>》。</p>
+</blockquote>
+<h2 id="三类角色"><a class="markdownIt-Anchor" href="#三类角色"></a> 三类角色</h2>
+<ul>
+<li><em>proposers</em></li>
+<li><em>acceptors</em></li>
+<li><em>learners</em></li>
+</ul>
+<h2 id="算法要求requirements"><a class="markdownIt-Anchor" href="#算法要求requirements"></a> 算法要求(requirements)</h2>
+<ol>
+<li>An <strong>acceptor</strong> can accept a <strong>proposal</strong> numbered <strong>n</strong> if it has not responded to a <strong>prepare request</strong> having a number greater than <strong>n</strong>.</li>
+<li>For any <strong>v</strong> and <strong>n</strong>, if a <strong>proposal</strong> with value <strong>v</strong> and number <strong>n</strong> is issued, then there is a set <strong>S</strong> consisting of a <strong>majority</strong> of <strong>acceptors</strong> such that either <em>(a)</em> no <strong>acceptor</strong> in <strong>S</strong> has accepted any <strong>proposal</strong> numbered <strong>less</strong> than <strong>n</strong>, or <em>(b)</em> <strong>v</strong> is the value of the <strong>highest-numbered</strong> <strong>proposal</strong> among all proposals numbered less than <strong>n</strong> accepted by the acceptors in <strong>S</strong>.</li>
+<li>(<strong>optimization</strong>) An <strong>acceptor</strong> needs to remember only the <strong>highest</strong> <strong>numbered</strong> <strong>proposal</strong> that it has ever <strong>accepted</strong> and the <strong>number</strong> of the <strong>highest numbered prepare request</strong> to which it has <strong>responded</strong>, while  the <strong>proposer</strong> can always <strong>abandon</strong> a <strong>proposal</strong> and <strong>forget</strong> all about it——as long as it never tries to issue another <strong>proposal</strong> with the <strong>same</strong> <strong>number</strong>.</li>
+<li>(<strong>optimization</strong>) If an <strong>acceptor</strong> ignores a prepare or accept request because it has already <strong>received</strong> a prepare request with a higher number, then it should probably <strong>inform</strong> the <strong>proposer</strong>, who should then <strong>abandon</strong> its <strong>proposal</strong>.</li>
+</ol>
+<blockquote>
+<ol>
+<li><strong>Acceptor</strong>可以接受<strong>number</strong>为<strong>n</strong>的<strong>proposal</strong>，如果它之前没有回复任何<strong>number</strong>大于<strong>n</strong>的<strong>prepare request</strong>。</li>
+<li>对于任意的<strong>v</strong>和<strong>n</strong>，如果有一个<strong>value</strong>为<strong>v</strong>，<strong>number</strong>为<strong>n</strong>的<strong>proposal</strong>被提出了，那么就存在一个由<strong>majority</strong>个<strong>acceptor</strong>组成的集合<strong>S</strong>。且<strong>S</strong>满足以下条件之一：<em>(a)</em> <strong>S</strong>中没有一个<strong>acceptor</strong>接受过<strong>number</strong>小于<strong>n</strong>的<strong>proposal</strong>；<em>(b)</em> <strong>v</strong>是<strong>S</strong>中的<strong>acceptor</strong>接受过的、所有满足“<strong>number</strong>小于<strong>n</strong>”的<strong>proposal</strong>中，<strong>number</strong>最大的<strong>proposal</strong>的<strong>value</strong>。</li>
+<li>(<strong>优化</strong>) <strong>Acceptor</strong>只需要记住它<strong>接受</strong>过的、<strong>number</strong>最大的<strong>proposal</strong>以及它<strong>回复</strong>过的、<strong>number</strong>最大的<strong>prepare request</strong>的<strong>number</strong>。而<strong>proposer</strong>总能随时放弃一个<strong>proposal</strong>，只要它不再发送另一个具有相同<strong>number</strong>的<strong>proposal</strong>。</li>
+<li>(<strong>优化</strong>) 如果一个<strong>proposal</strong>因为已经<strong>接收</strong><sup>[*]</sup>了(此处为<strong>received</strong>而非<strong>accepted</strong>)更高<strong>number</strong>的<strong>proposal</strong>而忽略处于<strong>prepare request</strong>或<strong>accept request</strong>阶段的<strong>proposal</strong>时，那么它应该<strong>通知</strong>对应的<strong>proposer</strong>放弃该<strong>proposal</strong>。</li>
+</ol>
+</blockquote>
+<h2 id="满足要求前需要满足的假设assumptions"><a class="markdownIt-Anchor" href="#满足要求前需要满足的假设assumptions"></a> 满足要求前需要满足的假设(assumptions)</h2>
+<ol>
+<li>Different <strong>proposals</strong> have different <strong>numbers</strong>.</li>
+<li>The assumption of <strong>non-Byzantine failures</strong>.</li>
+</ol>
+<blockquote>
+<ol>
+<li>不同<strong>proposal</strong>要能够有不同的序列号。</li>
+<li>不存在<strong>拜占庭式故障</strong>。</li>
+</ol>
+</blockquote>
+<h2 id="算法两阶段表示"><a class="markdownIt-Anchor" href="#算法两阶段表示"></a> 算法两阶段表示</h2>
+<h3 id="phase-1"><a class="markdownIt-Anchor" href="#phase-1"></a> Phase 1.</h3>
+<p><em>(a)</em> A <strong>proposer</strong> selects a <strong>proposal</strong> number <strong>n</strong> and sends a <strong>prepare request</strong> with number <strong>n</strong> to a <strong>majority</strong> of <strong>acceptors</strong>.</p>
+<p><em>(b)</em> If an <strong>acceptor</strong> receives a <strong>prepare request</strong> with number <strong>n</strong> <strong>greater than</strong> that of any prepare request to which it has already responded, then it responds to the request with a <strong>promise</strong> not to accept any more proposals numbered less than <strong>n</strong> and with the <strong>highest-numbered</strong> proposal (if any) that it has accepted.</p>
+<blockquote>
+<p><em>(a)</em> <strong>Proposer</strong>选择一个<strong>number</strong>为<strong>n</strong>的<strong>proposal</strong>并发送包含其信息的<strong>prepare request</strong>给<strong>acceptors</strong>的<strong>majority</strong>集合。</p>
+<p><em>(b)</em> 如果一个<strong>acceptor</strong>接收了一个<strong>number</strong>为<strong>n</strong>的<strong>prepare request</strong>，且<strong>n</strong>大于以往它回复的<strong>perpare request</strong>的<strong>number</strong>，那么它将承诺不再<strong>接受</strong><sup>[*]</sup>任何<strong>number</strong>小于<strong>n</strong>的<strong>proposal</strong>，并且回复其已经接受过的(<strong>如果有的话</strong>)最大<strong>number</strong>的<strong>proposal</strong>。</p>
+</blockquote>
+<h3 id="phase-2"><a class="markdownIt-Anchor" href="#phase-2"></a> Phase 2.</h3>
+<p><em>(a)</em> If the <strong>proposer</strong> receives a response to its prepare requests (numbered <strong>n</strong>) from a <strong>majority</strong> of <strong>acceptors</strong>, then it sends an <strong>accept request</strong> to <strong>each of those acceptors</strong> for a proposal numbered <strong>n</strong> with a value <strong>v</strong>, where <strong>v</strong> is the value of the <strong>highest-numbered proposal</strong> among the responses, or is any value if the responses reported no proposals.</p>
+<p><em>(b)</em> If an <strong>acceptor</strong> receives an <strong>accept request</strong> for a proposal numbered <strong>n</strong>, it accepts the proposal unless it has already responded to a <strong>prepare request</strong> having a number greater than <strong>n</strong>.</p>
+<blockquote>
+<p><em>(a)</em> 如果<strong>proposer</strong>接收了来自<strong>majority</strong>对其<strong>number</strong>为<strong>n</strong>的<strong>proposal</strong>的回应，那么它接下来将给包含在<strong>majority</strong>里的<strong>acceptors</strong>发送一个<strong>value</strong>为<strong>v</strong>，<strong>number</strong>为<strong>n</strong>的<strong>accept request</strong>，其中<strong>v</strong>要么是其在<strong>perpare request</strong>阶段收到的回复中<strong>number</strong>最大<strong>proposal</strong>里的<strong>value</strong>，要么是由<strong>proposer</strong>自己设定的值(在回复中没有<strong>proposal</strong>的情况下)。</p>
+<p><em>(b)</em> 当<strong>acceptor</strong>接收了一个<strong>number</strong>为<strong>n</strong>的<strong>accept request</strong>时，如果它没有对<strong>number</strong>大于<strong>n</strong>的<strong>prepare request</strong>进行过回复，那么就<strong>接受</strong>该<strong>accept request</strong>。</p>
+</blockquote>
+<h2 id="learners要做的"><a class="markdownIt-Anchor" href="#learners要做的"></a> Learners要做的</h2>
+<p>The <strong>acceptors</strong> could respond with their acceptances to <strong>some set</strong> of <strong>distinguished learners</strong>, each of which can then <strong>inform</strong> <strong>all</strong> the <strong>learners</strong> when a value has been chosen. Using <strong>a larger set of distinguished learners</strong> provides <strong>greater reliability</strong> at the cost of <strong>greater communication complexity</strong>.</p>
+<blockquote>
+<p>每个<strong>acceptor</strong>将它接受的<strong>proposal</strong>发送给其设定好的一个<strong>distinguished learners</strong>的集合，这个集合将会在任何一个<strong>value</strong>被选中时通知所有的<strong>learner</strong>。</p>
+</blockquote>
+<h2 id="progress取得进展"><a class="markdownIt-Anchor" href="#progress取得进展"></a> Progress取得进展</h2>
+<p>It’s easy to construct a scenario in which <strong>two proposers</strong> each keep issuing a sequence of proposals with <strong>increasing numbers</strong>, <strong>none</strong> of which are ever <strong>chosen</strong>. Proposer <strong>p</strong> completes <strong>phase 1</strong> for a proposal number <strong>n1</strong>. Another proposer <strong>q</strong> then completes <strong>phase 1</strong> for a proposal number <strong>n2 &gt; n1</strong>. Proposer <strong>p</strong>’s <strong>phase 2</strong> accept requests for a proposal numbered <strong>n1</strong> are ignored because the acceptors have all promised not to accept any new proposal numbered less than <strong>n2</strong>. So, proposer <strong>p</strong> then begins and completes <strong>phase 1</strong> for a new proposal number <strong>n3 &gt; n2</strong>, causing the second <strong>phase 2</strong> accept requests of proposer <strong>q</strong> to be ignored. And so on.</p>
+<p><strong>To guarantee progress</strong>, <strong>a distinguished proposer</strong> must be selected as the only one to try issuing proposals.</p>
+<p>If enough of the system (proposer, acceptors, and communication net work) is <strong>working properly</strong>, liveness can therefore be achieved by electing a <strong>single</strong> <strong>distinguished proposer</strong>.</p>
+<blockquote>
+<p>如果两个或以上的<strong>proposer</strong>轮流发送<strong>number</strong>比对方更大的提案，有可能导致最终它们都未被选中。</p>
+<p>为了保证流程的顺利进行，必须选出一个<strong>distinguished proposer</strong>，作为唯一的<strong>proposal</strong>发送者。</p>
+<p>在各组件正常工作的情况下，通过选出单一的<strong>distinguished proposer</strong>就能保持系统的活力。</p>
+</blockquote>
+<h2 id="implementation实现针对存储"><a class="markdownIt-Anchor" href="#implementation实现针对存储"></a> Implementation实现(针对存储)</h2>
+<p>An <strong>acceptor</strong> records its intended response in <strong>stable storage</strong> before actually sending the response.</p>
+<p>Different <strong>proposers</strong> choose their numbers from <strong>disjoint sets of numbers</strong>, so two different <strong>proposers</strong> <strong>never</strong> issue a proposal with the <strong>same</strong> number. Each <strong>proposer</strong> remembers (<strong>in stable storage</strong>) the <strong>highest-numbered proposal</strong> it has tried to issue, and begins <strong>phase 1</strong> with a higher proposal number than any it has already used.</p>
+<blockquote>
+<p><strong>Acceptor</strong>会在真正发送回复前将其记录在<strong>stable storage</strong>中。</p>
+<p>不同的<strong>proposer</strong>会在各自不相交的集合中选择<strong>number</strong>来保证不会出现带有相同<strong>number</strong>的<strong>proposal</strong>被两个<strong>proposer</strong>同时提出。每个<strong>proposer</strong>会在<strong>stable storage</strong>里记住它提出的<strong>number</strong>最大的<strong>proposal</strong>，并只可能提出<strong>number</strong>更大的<strong>proposal</strong>开始<strong>phase 1</strong>。</p>
+</blockquote>
+<h2 id="state-machine状态机paxos算法的实现"><a class="markdownIt-Anchor" href="#state-machine状态机paxos算法的实现"></a> State Machine状态机(Paxos算法的实现)</h2>
+<p>An <strong>implementation</strong> that uses <strong>a single central server</strong> fails if that server fails. We therefore instead use <strong>a collection of servers</strong>, each one independently implementing the <strong>state machine</strong>. Because the state machine is <strong>deterministic</strong>, all the servers will produce the <strong>same</strong> sequences of states and outputs if they all execute the <strong>same</strong> sequence of commands. A <strong>client</strong> issuing a <strong>command</strong> can then use the output generated for it by any server.</p>
+<blockquote>
+<p>一种基于单一中心<strong>server</strong>的(分布式系统)实现会在该<strong>server</strong>发生故障时整体故障。</p>
+<p>我们因此使用一个<strong>server</strong>的集合进行代替，其中每个<strong>server</strong>由一个<strong>state machine</strong>独立实现。</p>
+<p>由于<strong>state machine</strong>是<strong>deterministic</strong>(确定性的)，所有<strong>server</strong>会在执行完相同序列的命令后产生相同的状态和输出。此时<strong>client</strong>可以在提交某个<strong>command</strong>后使用其中任意一个<strong>server</strong>产生的输出。</p>
+</blockquote>
+<p>To guarantee that all <strong>servers</strong> execute the same sequence of state machine commands, we implement <strong>a sequence of separate instances</strong> of the <strong>Paxos consensus algorithm</strong>, the <strong>value</strong> chosen by the <strong>i<sup>th</sup></strong> instance being the <strong>i<sup>th</sup></strong> state machine command in the sequence. Each <strong>server</strong> plays <strong>all the roles</strong> (<strong>proposer</strong>, <strong>acceptor</strong>, and <strong>learner</strong>) in each instance of the algorithm. For now, I assume that the set of servers is <strong>fixed</strong>, so all instances of the consensus algorithm use the same sets of <strong>agents</strong>.</p>
+<blockquote>
+<p>为了保证所有的<strong>server</strong>运行相同的命令序列，我们基于<strong>Paxos</strong>算法创建一个序列的单独实例，其中每个实例的<strong>value</strong>呈现为一个<strong>状态机命令</strong>。</p>
+<p>在处理任一个实例时，每个<strong>server</strong>同时扮演所有角色(<strong>proposer</strong>, <strong>acceptor</strong>, and <strong>learner</strong>)。</p>
+<p>现在假设这个<strong>server</strong>的集合是固定的，也即所有实例在同一套<strong>agents</strong>下运行。</p>
+</blockquote>
+<p>In normal operation, <strong>a single server</strong> is elected to be the <strong>leader</strong>, which acts as the <strong>distinguished proposer</strong> (the only one that tries to issue proposals) in all instances of the consensus algorithm. <strong>Clients</strong> send <strong>commands</strong> to the <strong>leader</strong>, who decides <strong>where</strong> in the sequence each command should appear. If the leader decides that a certain client command should be the <strong>135<sup>th</sup></strong> command, it tries to have that <strong>command</strong> chosen as the <strong>value</strong> of the <strong>135<sup>th</sup></strong> instance of the consensus algorithm.</p>
+<blockquote>
+<p>通常情况下，只有单一<strong>server</strong>会被选为<strong>leader</strong>，并充当<strong>distinguished proposer</strong>。</p>
+<p><strong>Client</strong>发送命令给<strong>leader</strong>，<strong>leader</strong>决定这个命令应该放在序列的<strong>哪个位置</strong>执行。</p>
+<p>例如，如果<strong>leader</strong>决定将这个命令在序列里排第<strong>135</strong>，那么它将成为第<strong>135</strong>个实例的<strong>value</strong>。</p>
+</blockquote>
+<h2 id="essentially-optimal算法优越性"><a class="markdownIt-Anchor" href="#essentially-optimal算法优越性"></a> Essentially Optimal算法优越性</h2>
+<p>Since failure of the leader and election of a new one should be <strong>rare events</strong>, the effective cost of executing a state machine command——that is, of achieving consensus on the command/value——is the cost of executing only <strong>phase 2</strong> of the consensus algorithm. It can be shown that <strong>phase 2</strong> of the <strong>Paxos consensus algorithm</strong> has the <strong>minimum</strong> possible cost of any algorithm for reaching agreement in the presence of faults. Hence, the <strong>Paxos algorithm</strong> is <strong>essentially optimal</strong>.</p>
+<blockquote>
+<p>由于<strong>leader</strong>的故障和选举都是小概率事件，一致性算法的主要开销在于<strong>phase 2</strong>的执行。</p>
+<p><strong>Paxos</strong>一致性算法在所有“<strong>能在出现故障情况下达到一致的实现</strong>”中有<strong>最小</strong>的可能开销。</p>
+<p>因此，<strong>Paxos</strong>算法是非常优越的。</p>
+</blockquote>
+<h2 id="初学者容易踩坑的点"><a class="markdownIt-Anchor" href="#初学者容易踩坑的点"></a> 初学者容易踩坑的点</h2>
+<p><strong>Proposers</strong>会发出两种<strong>request</strong>：<strong>prepare request</strong>和<strong>accept request</strong>，分别对应<strong>准备</strong>和<strong>接受</strong>两个阶段。</p>
+<p><strong>算法的两阶段表示</strong>是针对一个<strong>proposal</strong>而言的，即一个<strong>proposal</strong>从提出到最终被接受需要经过<strong>prepare request</strong>和<strong>accept request</strong>两个阶段。</p>
+<p>关于<strong>算法要求(requirements)<strong>里的</strong>第二点</strong>，其实可以理解为最新<strong>proposal</strong>可以向前兼容旧的<strong>proposal</strong>，保留已有的<strong>value</strong>。(这个要求保证了<strong>一致性</strong>。)</p>
+<p><strong>Value</strong>应该是一个抽象，可以实现为某个具体的变量(不单指变量的值，还应该包含这个变量到目前为止经历的完整的生命周期)，也可以是某个状态机命令，还可以表示为某个文件的记录。在上文的<strong>State Machine状态机</strong>部分中就是以<strong>状态机命令</strong>形式出现的。</p>
+<p>关于<strong>算法要求(requirements)<strong>里的</strong>第三点</strong>，注意<strong>acceptor</strong>要记住的分别是一个<strong>proposal</strong>和一个<strong>number</strong>，其中<strong>proposal</strong>是已经经过<strong>accept request</strong>被接受了的，它包含以往所有的<strong>value</strong>的集合；而<strong>number</strong>则对应在<strong>prepare request</strong>阶段答应的<strong>proposal</strong>，它用于判断是否回复其它处于<strong>prepare request</strong>的<strong>proposal</strong>以及判断是否接受其它处于<strong>accept request</strong>的<strong>proposal</strong>。</p>
+<p>算法里<strong>acceptor</strong>的“<strong>接受</strong>”(或“<strong>接收</strong>”)行为可以认为是<strong>prepare request</strong>和<strong>accept request</strong>两个阶段<strong>共用</strong>的(比如<strong>算法要求(requirements)<strong>里的</strong>第四点</strong>以及<strong>算法两阶段表示</strong>的 <strong>Phase 1.</strong> 的 <em>(b)</em> ，已使用上标“<sup>[*]</sup>”进行标注)，也就是说它选择接受处于<strong>prepare request</strong>或<strong>accept request</strong>两个阶段的<strong>proposal</strong>所带有的<strong>number</strong>必然同时大于其当前保存的<strong>proposal</strong>的<strong>number</strong>以及其当前保存的<strong>number</strong>。(这样的结果在原文里是使用<strong>数学归纳法</strong>进行证明的。)</p>
+<p><strong>Leader</strong>的存在保证的是<strong>progress</strong>(取得进展)，也就是说即使是对于场上不存在<strong>leader</strong>的情况、或者由于选举过程产生冲突从而导致多个<strong>leader</strong>同时存在的情况，<strong>Paxos</strong>算法的<strong>一致性</strong>和<strong>安全性</strong>依然能得到保留。</p>
+<p>在<strong>State Machine状态机</strong>部分里，要明确<strong>client</strong>输入的<strong>command</strong>与运行实例的<strong>value</strong>的关系。每一个已输入的<strong>command</strong>会对应一个经过<strong>leader</strong>决定成为实例的<strong>value</strong>，而反之则不然。例如，当一个新的<strong>leader</strong>被选举出来后，若其已知了第<strong>1-135</strong>、<strong>138-140</strong>的实例的<strong>value</strong>，其只能执行前<strong>1-135</strong>的<strong>value</strong>对应的命令而不能运行第<strong>138-140</strong>的部分，因为第<strong>136</strong>、<strong>137</strong>个实例的<strong>value</strong>还未知(这就是<strong>gap</strong>)。此时，我们就通过发送两个“<strong>noop</strong>”空指令(作为实例的<strong>value</strong>)来填充这个<strong>gap</strong>，从而使得第<strong>1-140</strong>的实例都能正常运行。</p>
+<p>在<strong>phase 1</strong>阶段，<strong>leader</strong>作为<strong>distinguished proposer</strong>发送<strong>proposal</strong>是可以“<strong>并行</strong>”的，即同时发送多个的实例，这些实例使用同一个<strong>number</strong>。这样做的好处在于，<strong>acceptor</strong>在第一次收到这些消息时，由于没有需要返回的<strong>proposal</strong>，因此回复的消息只包含一个“<strong>OK</strong>”，很大程度提升了效率。</p>
+<h2 id="论文算法修改"><a class="markdownIt-Anchor" href="#论文算法修改"></a> 论文算法修改</h2>
+<p><strong>Leslie Lamport</strong>本人承认在该论文中有一个错误，这个错误错误包含在：</p>
+<p>A <strong>proposer</strong> issues a <strong>proposal</strong> by sending, to some set of acceptors, a request that the proposal be accepted. (This need not be the <strong>same</strong> set of acceptors that responded to the initial requests.) Let’s call this an <strong>accept request</strong>.</p>
+<p>括号里的内容是有<strong>额外条件</strong>的，需要做一个<strong>算法优化</strong>：</p>
+<p>在<strong>acceptor</strong>接受一个<strong>accept request</strong>时，将其记录的<strong>number</strong>更新为该<strong>accept request</strong>携带的<strong>number</strong>。</p>
+<p>这个优化也与上标“<sup>[*]</sup>”标注部分相对应，这样能使得两个阶段不需要选择完全一致的<strong>acceptor</strong>集合进行发送，这也就是<strong>Leslie Lamport</strong>本人在《<strong>The Part-Time Parliament</strong>》中描述的算法。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://luvreadunion.com/2025/01/01/Paxos%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/" data-id="cmbxk3yg8001qhg9q06nf8g2o" data-title="Paxos一致性算法" class="article-share-link">分享</a>
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Paxos/" rel="tag">Paxos</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F/" rel="tag">分布式系统</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%A1%AC%E6%A0%B8/" rel="tag">硬核</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" class="wow fadeInUp">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          <img data-src="/images/76200564.jpg" data-sizes="auto" alt="MixMatch与FixMatch论文解读" class="lazyload">
+        
+        <a href="/2025/06/15/MixMatch%E4%B8%8EFixMatch%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            MixMatch与FixMatch论文解读
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/images/53833909.avif" data-sizes="auto" alt="动手通过Django建立Web数据库" class="lazyload">
+      
+      <a href="/2024/12/01/%E5%8A%A8%E6%89%8B%E9%80%9A%E8%BF%87Django%E5%BB%BA%E7%AB%8BWeb%E6%95%B0%E6%8D%AE%E5%BA%93/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          动手通过Django建立Web数据库
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrap wow fadeInRight wrap-sticky">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E7%99%BD"><span class="toc-number">1.</span> <span class="toc-text"> 开场白</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#paxos%E7%AE%97%E6%B3%95%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> Paxos算法注解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E7%B1%BB%E8%A7%92%E8%89%B2"><span class="toc-number">2.1.</span> <span class="toc-text"> 三类角色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E8%A6%81%E6%B1%82requirements"><span class="toc-number">2.2.</span> <span class="toc-text"> 算法要求(requirements)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BB%A1%E8%B6%B3%E8%A6%81%E6%B1%82%E5%89%8D%E9%9C%80%E8%A6%81%E6%BB%A1%E8%B6%B3%E7%9A%84%E5%81%87%E8%AE%BEassumptions"><span class="toc-number">2.3.</span> <span class="toc-text"> 满足要求前需要满足的假设(assumptions)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E4%B8%A4%E9%98%B6%E6%AE%B5%E8%A1%A8%E7%A4%BA"><span class="toc-number">2.4.</span> <span class="toc-text"> 算法两阶段表示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-1"><span class="toc-number">2.4.1.</span> <span class="toc-text"> Phase 1.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-2"><span class="toc-number">2.4.2.</span> <span class="toc-text"> Phase 2.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#learners%E8%A6%81%E5%81%9A%E7%9A%84"><span class="toc-number">2.5.</span> <span class="toc-text"> Learners要做的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#progress%E5%8F%96%E5%BE%97%E8%BF%9B%E5%B1%95"><span class="toc-number">2.6.</span> <span class="toc-text"> Progress取得进展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#implementation%E5%AE%9E%E7%8E%B0%E9%92%88%E5%AF%B9%E5%AD%98%E5%82%A8"><span class="toc-number">2.7.</span> <span class="toc-text"> Implementation实现(针对存储)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#state-machine%E7%8A%B6%E6%80%81%E6%9C%BApaxos%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.8.</span> <span class="toc-text"> State Machine状态机(Paxos算法的实现)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#essentially-optimal%E7%AE%97%E6%B3%95%E4%BC%98%E8%B6%8A%E6%80%A7"><span class="toc-number">2.9.</span> <span class="toc-text"> Essentially Optimal算法优越性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%AD%A6%E8%80%85%E5%AE%B9%E6%98%93%E8%B8%A9%E5%9D%91%E7%9A%84%E7%82%B9"><span class="toc-number">2.10.</span> <span class="toc-text"> 初学者容易踩坑的点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87%E7%AE%97%E6%B3%95%E4%BF%AE%E6%94%B9"><span class="toc-number">2.11.</span> <span class="toc-text"> 论文算法修改</span></a></li></ol></li></ol></div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+    
+      <div class="sidebar-btn-wrapper" style="position:static">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+    
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer" class="wow fadeInUp">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      <div>
+        <span class="icon-copyright"></span>
+        2020-2025
+        <span class="footer-info-sep"></span>
+        Luv
+      </div>
+      
+        <div>
+          基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+          Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+        </div>
+      
+      
+        <div>
+          <span class="icon-brush"></span>
+          106.3k
+          &nbsp;|&nbsp;
+          <span class="icon-coffee"></span>
+          06:41
+        </div>
+      
+      
+        <div>
+          <span class="icon-eye"></span>
+          <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+          &nbsp;|&nbsp;
+          <span class="icon-user"></span>
+          <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+        </div>
+      
+    </div>
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E7%99%BD"><span class="toc-number">1.</span> <span class="toc-text"> 开场白</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#paxos%E7%AE%97%E6%B3%95%E6%B3%A8%E8%A7%A3"><span class="toc-number">2.</span> <span class="toc-text"> Paxos算法注解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E7%B1%BB%E8%A7%92%E8%89%B2"><span class="toc-number">2.1.</span> <span class="toc-text"> 三类角色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E8%A6%81%E6%B1%82requirements"><span class="toc-number">2.2.</span> <span class="toc-text"> 算法要求(requirements)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%BB%A1%E8%B6%B3%E8%A6%81%E6%B1%82%E5%89%8D%E9%9C%80%E8%A6%81%E6%BB%A1%E8%B6%B3%E7%9A%84%E5%81%87%E8%AE%BEassumptions"><span class="toc-number">2.3.</span> <span class="toc-text"> 满足要求前需要满足的假设(assumptions)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E4%B8%A4%E9%98%B6%E6%AE%B5%E8%A1%A8%E7%A4%BA"><span class="toc-number">2.4.</span> <span class="toc-text"> 算法两阶段表示</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-1"><span class="toc-number">2.4.1.</span> <span class="toc-text"> Phase 1.</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#phase-2"><span class="toc-number">2.4.2.</span> <span class="toc-text"> Phase 2.</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#learners%E8%A6%81%E5%81%9A%E7%9A%84"><span class="toc-number">2.5.</span> <span class="toc-text"> Learners要做的</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#progress%E5%8F%96%E5%BE%97%E8%BF%9B%E5%B1%95"><span class="toc-number">2.6.</span> <span class="toc-text"> Progress取得进展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#implementation%E5%AE%9E%E7%8E%B0%E9%92%88%E5%AF%B9%E5%AD%98%E5%82%A8"><span class="toc-number">2.7.</span> <span class="toc-text"> Implementation实现(针对存储)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#state-machine%E7%8A%B6%E6%80%81%E6%9C%BApaxos%E7%AE%97%E6%B3%95%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.8.</span> <span class="toc-text"> State Machine状态机(Paxos算法的实现)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#essentially-optimal%E7%AE%97%E6%B3%95%E4%BC%98%E8%B6%8A%E6%80%A7"><span class="toc-number">2.9.</span> <span class="toc-text"> Essentially Optimal算法优越性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%AD%A6%E8%80%85%E5%AE%B9%E6%98%93%E8%B8%A9%E5%9D%91%E7%9A%84%E7%82%B9"><span class="toc-number">2.10.</span> <span class="toc-text"> 初学者容易踩坑的点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BA%E6%96%87%E7%AE%97%E6%B3%95%E4%BF%AE%E6%94%B9"><span class="toc-number">2.11.</span> <span class="toc-text"> 论文算法修改</span></a></li></ol></li></ol></div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    <div class="site-search">
+      <div class="reimu-popup popup">
+        <div class="reimu-search">
+          <span class="reimu-search-input-icon"></span>
+          <div class="reimu-search-input" id="reimu-search-input"></div>
+        </div>
+        <div class="reimu-results">
+          <div id="reimu-stats"></div>
+          <div id="reimu-hits"></div>
+          <div id="reimu-pagination" class="reimu-pagination"></div>
+        </div>
+        <span class="popup-btn-close"></span>
+      </div>
+    </div>
+    
+<script src="https://npm.webcache.cn/jquery@3.7.1/dist/jquery.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <script>
+    if (window.mermaid) {
+      // https://github.com/mermaid-js/mermaid/issues/1945
+      const elementCode = '.mermaid'
+      const saveOriginalData = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if (element.getAttribute('data-original-code') == null){
+                element.setAttribute('data-original-code', element.innerHTML)
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      }
+      const resetProcessed = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if(element.getAttribute('data-original-code') != null){
+                element.removeAttribute('data-processed')
+                element.innerHTML = element.getAttribute('data-original-code')
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      } 
+      const loadMermaid = (theme) => {
+        window.mermaid.initialize({theme})
+        window.mermaid.init({theme}, document.querySelectorAll(elementCode))
+      }
+      document.body.addEventListener('dark-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('dark'))
+        .catch(console.error)
+      })
+      document.body.addEventListener('light-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('default'))
+        .catch(console.error)
+      })
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/algoliasearch@4.17.1/dist/algoliasearch-lite.umd.js"></script>
+
+  
+<script src="https://npm.webcache.cn/instantsearch.js@4.56.1/dist/instantsearch.production.min.js"></script>
+
+  
+<script src="/js/algolia_search.js"></script>
+
+  <script>
+    var CONFIG = {
+      root: '/',
+      algolia: {
+        applicationID: "37ZQYZE607",
+        apiKey: "dfdbcdcf987c68afcf35a63def2936e2",
+        indexName: "Luv",
+        hits: {
+          "per_page": parseInt("10")
+        },
+        labels: {
+          "input_placeholder": "搜索.....",
+          "hits_empty": "未发现与 「${query}」相关内容",
+          "hits_stats": "找到${hits}条结果（用时 ${time} ms）"
+        }
+      }
+    };
+  </script>
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    firework(JSON.parse('{"excludeElements":["a"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+  <!-- hexo injector body_end start -->
+<script src="/js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+

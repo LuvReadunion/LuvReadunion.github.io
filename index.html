@@ -1,0 +1,983 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <title>
+    
+    Luv Read Union
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic%7CUbuntu%20Mono:400,400italic,700,700italic&display=swap&subset=latin,latin-ext" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="/css/loader.css">
+
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Luv Read Union">
+<meta property="og:url" content="https://luvreadunion.com/index.html">
+<meta property="og:site_name" content="Luv Read Union">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Luv">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Luv Read Union" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/typeface-source-code-pro@1.1.13/index.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/katex@0.16.9/dist/katex.min.css">
+
+  
+  
+  
+  
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/wowjs@1.1.3/css/libs/animate.css">
+
+    
+<script src="https://npm.webcache.cn/wowjs@1.1.3/dist/wow.min.js"></script>
+
+    <script>
+      new WOW({
+        offset: 0,
+        mobile: true,
+        live: false
+      }).init();
+    </script>
+  
+  
+    <script src="/sw.js"></script>
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg"></div>
+    <div class="loading-right-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff6e6b" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z" fill="#fd0d00" />
+          <path d="M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95" fill="#fd0d00" />
+        </svg>
+      </div>
+      <div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    const startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    const endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('load', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/images/banner.jpg" alt="">
+  
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <div id="logo-wrap">
+        
+          
+          
+            <a href="/" id="logo">
+              <h1>Luv Read Union</h1>
+            </a>
+          
+        
+      </div>
+      
+        
+        <h2 id="subtitle-wrap">
+          
+            <a href="/" id="subtitle">白莲故事会</a>
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content" class="outer">
+          
+          <section id="main">
+  
+  
+  <div class="post-wrap-left wow fadeInUp">
+    
+      <a class="post-link" href="/2025/10/06/GPipe%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" aria-label="GPipe论文解读"></a>
+    
+    
+    <div class="post-cover-left">
+      
+        <img data-src="/images/34509891.jpg" data-sizes="auto" alt="GPipe论文解读" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2025-10-06</span>
+        <span><span class="icon-pencil"></span>1.1k 字</span>
+        <span><span class="icon-clock"></span>4 分钟</span>
+      </div>
+      <h2 class="post-title">GPipe论文解读</h2>
+      <article class="post-article">
+        
+           开场白
+来阅读一下《GPipe: Easy Scaling with Micro-Batch Pipeline Parallelism》原论文。
+( •̀ ω •́ )y
+
+论文链接：https://proceedings.neurips.cc/paper_files/paper/2019/hash/093f65e080a295f8076b1c5722a46aa2-Abstract.html
+
+ GPipe
+Question：如何在超出单个加速子内存限制的情况下扩大模型容量？
+现有的解决方式缺乏泛用性。
+GPipe：流水线并行库，以“层”的序列方式进行工作，将不同“层”划分给不同的加速子。同
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrap-right wow fadeInUp">
+    
+    <a class="post-link" href="/2025/10/06/Minder%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/"></a>
+    
+    <div class="post-cover-right">
+      
+        <img data-src="/images/42826738.jpg" data-sizes="auto" alt="Minder论文解读" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2025-10-06</span>
+        <span><span class="icon-pencil"></span>1.4k 字</span>
+        <span><span class="icon-clock"></span>5 分钟</span>
+      </div>
+      <h2 class="post-title">Minder论文解读</h2>
+      <article class="post-article">
+        
+           开场白
+来阅读一下《Minder: Faulty Machine Detection for Large-scale Distributed Model Training》原论文。
+ο(=•ω＜=)ρ⌒☆
+
+论文链接：https://www.usenix.org/conference/nsdi25/presentation/deng
+
+ Minder
+ 论文贡献
+
+调查了：故障类型以及其与各个指标的相关性。从经验上解释了这些相关性的表现。概述检测的挑战。
+提出Minder的设计思想：相似度、连续性、数据降噪模型、指标优先级。并通过全面的评估加上消融实验，来凸显其反应速度快、准确率高的特点以及
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrap-left wow fadeInUp">
+    
+      <a class="post-link" href="/2025/10/06/LAKE%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" aria-label="LAKE论文解读"></a>
+    
+    
+    <div class="post-cover-left">
+      
+        <img data-src="/images/36861160.avif" data-sizes="auto" alt="LAKE论文解读" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2025-10-06</span>
+        <span><span class="icon-pencil"></span>1.8k 字</span>
+        <span><span class="icon-clock"></span>6 分钟</span>
+      </div>
+      <h2 class="post-title">LAKE论文解读</h2>
+      <article class="post-article">
+        
+           开场白
+来阅读一下《Towards a Machine Learning-Assisted Kernel with LAKE》原论文。
+o((&amp;gt;ω&amp;lt; ))o
+
+论文链接：https://dl.acm.org/doi/abs/10.1145/3575693.3575697
+
+ LAKE
+Learning-assisted, Accelerated KErnel
+5个启发式内核子系统可以被ML加速：(最后一行是文件系统加密(EFS))
+
+
+
+应用
+ML算法
+API
+推理频次
+
+
+
+
+存储系统里I/O延迟的预测
+神经网络
+CUDA
+细粒度
+
+
+预测缓存中的页热度以替换
+LSTM
+Hig
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrap-right wow fadeInUp">
+    
+    <a class="post-link" href="/2025/06/15/MixMatch%E4%B8%8EFixMatch%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/"></a>
+    
+    <div class="post-cover-right">
+      
+        <img data-src="/images/76200564.jpg" data-sizes="auto" alt="MixMatch与FixMatch论文解读" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2025-06-15</span>
+        <span><span class="icon-pencil"></span>2.9k 字</span>
+        <span><span class="icon-clock"></span>12 分钟</span>
+      </div>
+      <h2 class="post-title">MixMatch与FixMatch论文解读</h2>
+      <article class="post-article">
+        
+           开场白
+做模式识别课内作业，有关MixMatch和FixMatch。
+来阅读一下《MixMatch: A Holistic Approach to Semi-Supervised Learning》和《FixMatch: Simplifying Semi-Supervised Learning with Consistency and Confidence》两篇原论文。
+（*＾-＾ *）
+ 原论文阅读
+ MixMatch
+
+ Consistency Regularization
+MixMatch使用了一致性正则化(自洽正则化)，即对无标签数据进行数据增广，产生的新数据输入分类器，预测结果应保
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrap-left wow fadeInUp">
+    
+      <a class="post-link" href="/2025/01/01/Paxos%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/" aria-label="Paxos一致性算法"></a>
+    
+    
+    <div class="post-cover-left">
+      
+        <img data-src="/images/94011406.webp" data-sizes="auto" alt="Paxos一致性算法" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2025-01-01</span>
+        <span><span class="icon-pencil"></span>3.1k 字</span>
+        <span><span class="icon-clock"></span>13 分钟</span>
+      </div>
+      <h2 class="post-title">Paxos一致性算法</h2>
+      <article class="post-article">
+        
+           开场白
+水了那么久的博客，这次来点稍微硬核的吧。
+来读一下Leslie Lamport 的论文《Paxos Made Simple》。
+全程坚持读下来，我能保证读者明白什么是Paxos。
+开干！
+(～￣▽￣)～
+ Paxos算法注解
+
+参阅 Leslie Lamport 的论文《Paxos Made Simple》。
+
+ 三类角色
+
+proposers
+acceptors
+learners
+
+ 算法要求(requirements)
+
+An acceptor can accept a proposal numbered n if it has not responded to a prepar
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrap-right wow fadeInUp">
+    
+    <a class="post-link" href="/2024/12/01/%E5%8A%A8%E6%89%8B%E9%80%9A%E8%BF%87Django%E5%BB%BA%E7%AB%8BWeb%E6%95%B0%E6%8D%AE%E5%BA%93/"></a>
+    
+    <div class="post-cover-right">
+      
+        <img data-src="/images/53833909.avif" data-sizes="auto" alt="动手通过Django建立Web数据库" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-12-01</span>
+        <span><span class="icon-pencil"></span>4.7k 字</span>
+        <span><span class="icon-clock"></span>21 分钟</span>
+      </div>
+      <h2 class="post-title">动手通过Django建立Web数据库</h2>
+      <article class="post-article">
+        
+           开场白
+做一个简单的、基于Django框架和MySQL的Web数据库。
+ο(=•ω＜=)ρ⌒☆
+好久没有手搓html了。
+ 数据库通用建立WEB查询指南
+ 写在前面
+这是一个非常简单的、通过Django模板框架搭建可在线查询的数据库的建立指南，通过MySQL本地配置。由于是面向作业编程，所以讲解会尽量细致简洁，拓展较少。
+需要用到的工具：
+
+本地MySQL
+PyCharm专业版
+
+ 环境准备
+从官网下载MySQL的8.0版本(其实这个版本应该没什么太大影响)：
+
+参看https://blog.csdn.net/JYT20031003/article/details/143926595
+
+下载
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrap-left wow fadeInUp">
+    
+      <a class="post-link" href="/2024/09/09/OS%E5%A1%AB%E7%A9%BA%E9%A2%98%E7%9C%9F%E9%A2%98%E9%A2%98%E8%A7%A3/" aria-label="OS填空题真题题解"></a>
+    
+    
+    <div class="post-cover-left">
+      
+        <img data-src="/images/86446038.avif" data-sizes="auto" alt="OS填空题真题题解" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-09-09</span>
+        <span><span class="icon-pencil"></span>6.8k 字</span>
+        <span><span class="icon-clock"></span>24 分钟</span>
+      </div>
+      <h2 class="post-title">OS填空题真题题解</h2>
+      <article class="post-article">
+        
+           开场白
+操作系统狠狠吃了一壶。
+放出OS填空题以及本人给出的答案。
+泽被后世.jpg
+ο(=•ω＜=)ρ⌒☆
+ 操作系统填空题原题及答案
+ Page 1
+1．计算机系统是按用户要求接收和存储信息，自动进行__并输出结果信息的系统。
+2．计算机由硬件系统和__系统组成。
+3．软件系统由各种__和数据组成。
+4．计算机系统把进行__和控制程序执行的功能集中组成一种软件称为操作系统。
+5．操作系统使用户合理__，防止各用户间相互干扰。
+6．使计算机系统使用方便和__是操作系统的两个主要设计目标。
+7．批处理操作系统、__和实时操作系统是基本的操作系统。
+8．用户要求计算机系统中进行处理的一个计算机
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrap-right wow fadeInUp">
+    
+    <a class="post-link" href="/2024/08/13/Godot%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/"></a>
+    
+    <div class="post-cover-right">
+      
+        <img data-src="/images/76198326.avif" data-sizes="auto" alt="Godot开发日记" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-08-13</span>
+        <span><span class="icon-pencil"></span>2.7k 字</span>
+        <span><span class="icon-clock"></span>10 分钟</span>
+      </div>
+      <h2 class="post-title">Godot开发日记</h2>
+      <article class="post-article">
+        
+           开场白
+半夜忽惊起，写下一个绝妙的游戏点子。
+那就开始做吧。
+希望在开学前做出一个游戏DEMO。
+开始学习Godot！
+o((&amp;gt;ω&amp;lt; ))o
+ Godot
+ Godot 关键概念
+在 Godot 中，游戏就是一棵由节点构成的树，树又可以结合起来构成场景。然后你还可以将这些节点连起来，让它们通过信号进行通信。
+ 场景
+场景可以是一个角色、一件武器、用户界面中的一个菜单、一座房子、整个关卡，或者任何你能想到的东西。
+场景可以嵌套。
+ 节点
+场景由若干节点组成。节点是游戏最小的构件，排列成树状。
+所有节点都具备以下特性：
+
+名称。
+可编辑的属性。
+每帧都可以接收回调以进行更新。
+你可以
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrap-left wow fadeInUp">
+    
+      <a class="post-link" href="/2024/04/18/Hexo%E7%AC%94%E8%AE%B0/" aria-label="Hexo笔记"></a>
+    
+    
+    <div class="post-cover-left">
+      
+        <img data-src="/images/35632328.avif" data-sizes="auto" alt="Hexo笔记" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-04-18</span>
+        <span><span class="icon-pencil"></span>8.6k 字</span>
+        <span><span class="icon-clock"></span>36 分钟</span>
+      </div>
+      <h2 class="post-title">Hexo笔记</h2>
+      <article class="post-article">
+        
+           开场白
+这是一篇关于Hexo的使用指南~
+关于C++的惊变系列估计要鸽了。。。。。(悲)\
+还是尽力尽快更新吧！
+ο(=•ω＜=)ρ⌒☆
+ Hexo
+ 命令
+ init
+1$ hexo init [folder]
+
+新建一个网站。如果没有设置 folder ，Hexo 默认在目前的文件夹建立网站。
+本命令相当于执行了以下几步：
+
+Git clone hexo-starter 和 hexo-theme-landscape 主题到当前目录或指定目录。
+使用 Yarn 1、pnpm 或 npm 包管理器下载依赖（如有已安装多个，则列在前面的优先）。npm 默认随 Node.js 安装。
+
+
+ ne
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+  
+  <div class="post-wrap-right wow fadeInUp">
+    
+    <a class="post-link" href="/2024/03/20/%E6%83%8A%E5%8F%9842%E5%A4%A9-C++-%E5%90%9B%E5%AD%90%E7%BB%88%E6%97%A5%E4%B9%BE%E4%B9%BE/"></a>
+    
+    <div class="post-cover-right">
+      
+        <img data-src="/images/66458540.avif" data-sizes="auto" alt="惊变42天: Week 3 君子终日乾乾" class="lazyload">
+      
+    </div>
+    <div class="post-info">
+      <div class="post-meta">
+        <span><span class="icon-calendar"></span>2024-03-20</span>
+        <span><span class="icon-pencil"></span>34.7k 字</span>
+        <span><span class="icon-clock"></span>128 分钟</span>
+      </div>
+      <h2 class="post-title">惊变42天: Week 3 君子终日乾乾</h2>
+      <article class="post-article">
+        
+           开场白
+一想到这期的封面能放我的早苗，还是尽快赶出来了。
+第三周的内容堪比前两周的总和，记录了三个章节的内容，类是 C++ 学习很重要的一个part，所以篇幅的开销是巨大的(不过后面的章节也不会太少啦)。
+从进度看来，42天完成整本书的任务应是太难，需要更多的时间。
+最近一直在单曲循环一首写王安石王相公的歌曲，感动至极，也在这里分享。
+《诗出有名·王安石荆公篇》
+世之奇伟、瑰怪，非常之观，常在于险远，而人之所罕至焉，故非有志者不能至也。
+(👉 ^ v ^ )👉
+继续加油吧~
+ Week 1: 潜龙勿用
+点击跳转第一期内容：潜龙勿用
+ Week 2: 见龙在田
+点击跳转第二期内容：见龙在田
+        
+      </article>
+    </div>
+  </div>
+
+
+  
+
+
+  <nav id="page-nav" class="wow fadeInUp">
+    
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+  </nav>
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrap wow fadeInRight ">
+    
+      <div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+
+    
+    
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer" class="wow fadeInUp">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      <div>
+        <span class="icon-copyright"></span>
+        2020-2025
+        <span class="footer-info-sep"></span>
+        Luv
+      </div>
+      
+        <div>
+          基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+          Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+        </div>
+      
+      
+        <div>
+          <span class="icon-brush"></span>
+          106.3k
+          &nbsp;|&nbsp;
+          <span class="icon-coffee"></span>
+          06:41
+        </div>
+      
+      
+        <div>
+          <span class="icon-eye"></span>
+          <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+          &nbsp;|&nbsp;
+          <span class="icon-user"></span>
+          <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+        </div>
+      
+    </div>
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+
+    
+  </div>
+  
+</nav>
+
+    </div>
+    <div class="site-search">
+      <div class="reimu-popup popup">
+        <div class="reimu-search">
+          <span class="reimu-search-input-icon"></span>
+          <div class="reimu-search-input" id="reimu-search-input"></div>
+        </div>
+        <div class="reimu-results">
+          <div id="reimu-stats"></div>
+          <div id="reimu-hits"></div>
+          <div id="reimu-pagination" class="reimu-pagination"></div>
+        </div>
+        <span class="popup-btn-close"></span>
+      </div>
+    </div>
+    
+<script src="https://npm.webcache.cn/jquery@3.7.1/dist/jquery.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <script>
+    if (window.mermaid) {
+      // https://github.com/mermaid-js/mermaid/issues/1945
+      const elementCode = '.mermaid'
+      const saveOriginalData = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if (element.getAttribute('data-original-code') == null){
+                element.setAttribute('data-original-code', element.innerHTML)
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      }
+      const resetProcessed = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if(element.getAttribute('data-original-code') != null){
+                element.removeAttribute('data-processed')
+                element.innerHTML = element.getAttribute('data-original-code')
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      } 
+      const loadMermaid = (theme) => {
+        window.mermaid.initialize({theme})
+        window.mermaid.init({theme}, document.querySelectorAll(elementCode))
+      }
+      document.body.addEventListener('dark-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('dark'))
+        .catch(console.error)
+      })
+      document.body.addEventListener('light-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('default'))
+        .catch(console.error)
+      })
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/algoliasearch@4.17.1/dist/algoliasearch-lite.umd.js"></script>
+
+  
+<script src="https://npm.webcache.cn/instantsearch.js@4.56.1/dist/instantsearch.production.min.js"></script>
+
+  
+<script src="/js/algolia_search.js"></script>
+
+  <script>
+    var CONFIG = {
+      root: '/',
+      algolia: {
+        applicationID: "37ZQYZE607",
+        apiKey: "dfdbcdcf987c68afcf35a63def2936e2",
+        indexName: "Luv",
+        hits: {
+          "per_page": parseInt("10")
+        },
+        labels: {
+          "input_placeholder": "搜索.....",
+          "hits_empty": "未发现与 「${query}」相关内容",
+          "hits_stats": "找到${hits}条结果（用时 ${time} ms）"
+        }
+      }
+    };
+  </script>
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    firework(JSON.parse('{"excludeElements":["a"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+  <!-- hexo injector body_end start -->
+<script src="/js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+

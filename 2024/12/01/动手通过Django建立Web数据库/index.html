@@ -1,0 +1,875 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <title>
+    动手通过Django建立Web数据库 |
+    
+    Luv Read Union
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic%7CUbuntu%20Mono:400,400italic,700,700italic&display=swap&subset=latin,latin-ext" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="/css/loader.css">
+
+  <meta name="description" content="开场白 做一个简单的、基于Django框架和MySQL的Web数据库。 ο(&#x3D;•ω＜&#x3D;)ρ⌒☆ 好久没有手搓html了。  数据库通用建立WEB查询指南  写在前面 这是一个非常简单的、通过Django模板框架搭建可在线查询的数据库的建立指南，通过MySQL本地配置。由于是面向作业编程，所以讲解会尽量细致简洁，拓展较少。 需要用到的工具：  本地MySQL PyCharm专业版   环境准备 从">
+<meta property="og:type" content="article">
+<meta property="og:title" content="动手通过Django建立Web数据库">
+<meta property="og:url" content="https://luvreadunion.com/2024/12/01/%E5%8A%A8%E6%89%8B%E9%80%9A%E8%BF%87Django%E5%BB%BA%E7%AB%8BWeb%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="Luv Read Union">
+<meta property="og:description" content="开场白 做一个简单的、基于Django框架和MySQL的Web数据库。 ο(&#x3D;•ω＜&#x3D;)ρ⌒☆ 好久没有手搓html了。  数据库通用建立WEB查询指南  写在前面 这是一个非常简单的、通过Django模板框架搭建可在线查询的数据库的建立指南，通过MySQL本地配置。由于是面向作业编程，所以讲解会尽量细致简洁，拓展较少。 需要用到的工具：  本地MySQL PyCharm专业版   环境准备 从">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B45A8FB26-94E6-4E13-9B12-C93468BDF25E%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B22157BD1-5244-441E-8BC5-D551DC2706FB%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B637962F7-31A3-4E74-9ECD-B108BDDDF57F%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7BF6BCFE8E-9932-41F7-93ED-7D949F75966E%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B9F3905D4-A023-4B49-8D0B-6B8D391BB16E%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B9B1867A2-E130-4786-B723-96BD2FC241CE%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B035838F0-8769-479E-AECC-E67D42790163%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7BD828E1B1-3C88-45BE-8CBC-F55CAA2039C3%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7BF2F087DA-4F9E-40BA-B5CB-62BC812147FF%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7BFCB76B08-DDE9-4C1F-BF14-0130327C4198%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B97091B8A-7376-4183-A02C-235A409A9E69%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B6D6114F4-6F89-4C66-89ED-B22E22C78020%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B23C276D4-055D-4B93-8D58-4710B9CB73EA%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7BB5D3D328-C352-4E94-809B-7F4DB02376D6%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B5F2AC270-62DF-4914-8497-2596773077BC%7D.png">
+<meta property="og:image" content="https://luvreadunion.com/images/2024-12-01/%7B9D957739-F49A-4C13-BD53-7223A7B5E54D%7D.png">
+<meta property="article:published_time" content="2024-12-01T12:43:10.000Z">
+<meta property="article:modified_time" content="2024-12-01T13:13:55.802Z">
+<meta property="article:author" content="Luv">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="Web">
+<meta property="article:tag" content="Django">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://luvreadunion.com/images/2024-12-01/%7B45A8FB26-94E6-4E13-9B12-C93468BDF25E%7D.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Luv Read Union" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/typeface-source-code-pro@1.1.13/index.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/katex@0.16.9/dist/katex.min.css">
+
+  
+  
+  
+  
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/wowjs@1.1.3/css/libs/animate.css">
+
+    
+<script src="https://npm.webcache.cn/wowjs@1.1.3/dist/wow.min.js"></script>
+
+    <script>
+      new WOW({
+        offset: 0,
+        mobile: true,
+        live: false
+      }).init();
+    </script>
+  
+  
+    <script src="/sw.js"></script>
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg"></div>
+    <div class="loading-right-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff6e6b" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z" fill="#fd0d00" />
+          <path d="M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95" fill="#fd0d00" />
+        </svg>
+      </div>
+      <div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    const startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    const endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('load', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/images/53833909.avif" alt="动手通过Django建立Web数据库">
+  
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <div id="logo-wrap">
+        
+          
+          
+            <a href="/" id="logo">
+              <h1>动手通过Django建立Web数据库</h1>
+            </a>
+          
+        
+      </div>
+      
+        
+        <h2 id="subtitle-wrap">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content" class="outer">
+          
+          <section id="main"><article id="post-动手通过Django建立Web数据库" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner">
+    <div class="article-meta">
+      <div class="article-date wow slideInLeft">
+  <a href="/2024/12/01/%E5%8A%A8%E6%89%8B%E9%80%9A%E8%BF%87Django%E5%BB%BA%E7%AB%8BWeb%E6%95%B0%E6%8D%AE%E5%BA%93/" class="article-date-link">
+    <time datetime="2024-12-01T12:43:10.000Z" itemprop="datePublished">2024-12-01</time>
+  </a>
+</div>
+
+      
+  <div class="article-category wow slideInLeft">
+    <a class="article-category-link" href="/categories/Web/">Web</a><a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="开场白"><a class="markdownIt-Anchor" href="#开场白"></a> 开场白</h1>
+<p>做一个简单的、基于<strong>Django</strong>框架和<strong>MySQL</strong>的<strong>Web</strong>数据库。</p>
+<p>ο(=•ω＜=)ρ⌒☆</p>
+<p>好久没有手搓<strong>html</strong>了。</p>
+<h1 id="数据库通用建立web查询指南"><a class="markdownIt-Anchor" href="#数据库通用建立web查询指南"></a> 数据库通用建立<strong>WEB</strong>查询指南</h1>
+<h2 id="写在前面"><a class="markdownIt-Anchor" href="#写在前面"></a> 写在前面</h2>
+<p>这是一个非常简单的、通过<strong>Django</strong>模板框架搭建可<strong>在线查询</strong>的数据库的建立指南，通过<strong>MySQL</strong>本地配置。由于是面向作业编程，所以讲解会尽量细致简洁，拓展较少。</p>
+<p>需要用到的工具：</p>
+<ul>
+<li>本地<strong>MySQL</strong></li>
+<li><strong>PyCharm</strong>专业版</li>
+</ul>
+<h3 id="环境准备"><a class="markdownIt-Anchor" href="#环境准备"></a> 环境准备</h3>
+<p>从官网下载<strong>MySQL</strong>的<strong>8.0</strong>版本(其实这个版本应该没什么太大影响)：</p>
+<blockquote>
+<p>参看<a target="_blank" rel="noopener" href="https://blog.csdn.net/JYT20031003/article/details/143926595">https://blog.csdn.net/JYT20031003/article/details/143926595</a></p>
+</blockquote>
+<p>下载<strong>PyCharm</strong>专业版(学生入口)：</p>
+<blockquote>
+<p>参考入口<a target="_blank" rel="noopener" href="https://www.jetbrains.com/community/education/#students">https://www.jetbrains.com/community/education/#students</a></p>
+</blockquote>
+<p>可能还需要配置一个本地的<strong>Conda</strong>环境，这个就交给互联网了。</p>
+<h2 id="正式开始"><a class="markdownIt-Anchor" href="#正式开始"></a> 正式开始</h2>
+<p>个人建议同时写前端和后端，但是为了保持清晰的思路，这里选择先从后端开始，然后是前端，两者交替编辑。</p>
+<h3 id="后端1"><a class="markdownIt-Anchor" href="#后端1"></a> 后端1</h3>
+<h4 id="创建数据库"><a class="markdownIt-Anchor" href="#创建数据库"></a> 创建数据库</h4>
+<p>打开<strong>MySQL</strong>命令行，创建<strong>database</strong>，用于存放信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">create database <span class="string">&#x27;你的数据库名称&#x27;</span> character <span class="built_in">set</span> utf8;</span><br></pre></td></tr></table></figure>
+<p>在<code>settings.py</code>文件里加入如下设置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">DATABASES = &#123;</span><br><span class="line">    <span class="string">&#x27;default&#x27;</span>: &#123;</span><br><span class="line">        <span class="string">&#x27;ENGINE&#x27;</span>: <span class="string">&#x27;django.db.backends.mysql&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;NAME&#x27;</span>: <span class="string">&#x27;你的数据库名称&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;USER&#x27;</span>: <span class="string">&#x27;你的数据库用户&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;PASSWORD&#x27;</span>: <span class="string">&#x27;你的密码&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;HOST&#x27;</span>: <span class="string">&#x27;localhost&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;PORT&#x27;</span>: <span class="string">&#x27;3306&#x27;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="orm"><a class="markdownIt-Anchor" href="#orm"></a> ORM</h4>
+<p>接下来就是有关表的操作，使用的是<strong>ORM</strong>，这玩意可以简单理解为函数封装。</p>
+<blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_47035302/article/details/131423759">https://blog.csdn.net/weixin_47035302/article/details/131423759</a></p>
+</blockquote>
+<h4 id="创建表的模型-导入表"><a class="markdownIt-Anchor" href="#创建表的模型-导入表"></a> 创建表的模型、导入表</h4>
+<p>在<code>LuvSQL/models.py</code>中定义模型：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Book</span>(models.Model):</span><br><span class="line">    book_id = models.CharField(max_length=<span class="number">8</span>, primary_key=<span class="literal">True</span>)</span><br><span class="line">    book_name = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    book_isbn = models.CharField(max_length=<span class="number">17</span>)</span><br><span class="line">    book_author = models.CharField(max_length=<span class="number">10</span>)</span><br><span class="line">    book_publisher = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    interview_times = models.IntegerField()</span><br><span class="line">    book_price = models.FloatField()</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Reader</span>(models.Model):</span><br><span class="line">    reader_id = models.CharField(max_length=<span class="number">8</span>, primary_key=<span class="literal">True</span>)</span><br><span class="line">    reader_name = models.CharField(max_length=<span class="number">50</span>)</span><br><span class="line">    reader_sex = models.CharField(max_length=<span class="number">2</span>)</span><br><span class="line">    reader_department = models.CharField(max_length=<span class="number">60</span>)</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Record</span>(models.Model):</span><br><span class="line">    reader_id = models.ForeignKey(to=<span class="string">&quot;Book&quot;</span>, on_delete=models.SET_NULL, null=<span class="literal">True</span>)</span><br><span class="line">    book_id = models.ForeignKey(to=<span class="string">&quot;Reader&quot;</span>, on_delete=models.SET_NULL, null=<span class="literal">True</span>)</span><br><span class="line">    borrow_date = models.DateField()</span><br><span class="line">    return_date = models.DateField()</span><br><span class="line">    notes = models.CharField(max_length=<span class="number">50</span>, null=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>ORM</strong>默认设置不允许<strong>NULL</strong>。</p>
+<p><strong>ORM</strong>中设置主键、外键如代码所示。</p>
+<p>有关主键、外键的设置参看：<a target="_blank" rel="noopener" href="https://blog.csdn.net/xiaoyu070321/article/details/133687812">https://blog.csdn.net/xiaoyu070321/article/details/133687812</a></p>
+</blockquote>
+<p>添加完表的设置之后，先回<code>settings.py</code>确认是否<strong>INSTALLED_APPS</strong>中是否已经添加<code>'LuvSQL.apps.LuvsqlConfig'</code>的条目，没有则添加。</p>
+<p>接下来我们先来尝试通过镜像将上面设计好的模型映射到实际的数据库表中。</p>
+<p>在终端运行这两个命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python manage.py makemigrations			<span class="comment"># 生成要迁移到数据库的文件</span></span><br><span class="line">python manage.py migrate				<span class="comment"># 应用数据库迁移</span></span><br></pre></td></tr></table></figure>
+<p>在本地<strong>MySQL</strong>终端输入下面指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">use LuvSQL;</span><br><span class="line">show tables;</span><br></pre></td></tr></table></figure>
+<p>你应该能看到<strong>book</strong>、<strong>reader</strong>、<strong>record</strong>出现了：</p>
+<img src="/images/2024-12-01/{45A8FB26-94E6-4E13-9B12-C93468BDF25E}.png" style="zoom:50%;" />
+<h3 id="前端1"><a class="markdownIt-Anchor" href="#前端1"></a> 前端1</h3>
+<h4 id="主站"><a class="markdownIt-Anchor" href="#主站"></a> 主站</h4>
+<p>简单起见，我们直接写<strong>html</strong>文件，如果想要装饰网站就写<strong>CSS</strong>文件。</p>
+<blockquote>
+<p>参看：<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/docs/Learn/Getting_started_with_the_web/HTML_basics">HTML 基础 - 学习 Web 开发 | MDN</a></p>
+</blockquote>
+<p>在<strong>templates</strong>目录下添加一个<strong>html</strong>文件，命名为<code>site.html</code>，写入内容如下：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>LuvSQL主页<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;./select&quot;</span>&gt;</span> <span class="tag">&lt;<span class="name">h2</span>&gt;</span>查询功能<span class="tag">&lt;/<span class="name">h2</span>&gt;</span> <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;./insert&quot;</span>&gt;</span> <span class="tag">&lt;<span class="name">h2</span>&gt;</span>插入功能<span class="tag">&lt;/<span class="name">h2</span>&gt;</span> <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;./delete&quot;</span>&gt;</span> <span class="tag">&lt;<span class="name">h2</span>&gt;</span>删除功能<span class="tag">&lt;/<span class="name">h2</span>&gt;</span> <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;./update&quot;</span>&gt;</span> <span class="tag">&lt;<span class="name">h2</span>&gt;</span>更新功能<span class="tag">&lt;/<span class="name">h2</span>&gt;</span> <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>无论如何，还是希望读者能理解这些步骤是在做什么。</p>
+</blockquote>
+<p>可以直接打开这个<strong>html</strong>文件，查看一下，应该会有四个对应的超链接。</p>
+<p>同样的创建各类功能的网页的<strong>html</strong>文件如下：</p>
+<img src="/images/2024-12-01/{22157BD1-5244-441E-8BC5-D551DC2706FB}.png" style="zoom:50%;" />
+<p>然后要让<strong>Django</strong>知道这个<code>home.html</code>文件是主页，在<code>DjangoProject/urls.py</code>中添加路径如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> path</span><br><span class="line"><span class="keyword">from</span> LuvSQL.views <span class="keyword">import</span> show_home</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    <span class="comment"># 主页</span></span><br><span class="line">    path(<span class="string">&#x27;&#x27;</span>, show_home),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p><code>show_home</code>是什么呢？它是我们即将在<code>LuvSQL/views.py</code>里添加的函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_home</span>(<span class="params">request</span>):                    <span class="comment"># 主页</span></span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;home.html&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>render</code>函数用来回馈<strong>HTTP</strong>请求。</p>
+</blockquote>
+<p>运行一下<strong>Django</strong>的本地服务器，就会发现在主页里了。</p>
+<h4 id="表服务"><a class="markdownIt-Anchor" href="#表服务"></a> 表服务</h4>
+<p>那么对于其他的站点也是类似的操作，先在<code>urls.py</code>里添加路径：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> LuvSQL.views <span class="keyword">import</span> show_select, show_insert, show_delete, show_update</span><br><span class="line"></span><br><span class="line">urlpatterns = [</span><br><span class="line">    <span class="comment"># 查询</span></span><br><span class="line">    path(<span class="string">&#x27;select/&#x27;</span>, show_select),</span><br><span class="line">    <span class="comment"># 插入</span></span><br><span class="line">    path(<span class="string">&#x27;insert/&#x27;</span>, show_insert),</span><br><span class="line">    <span class="comment"># 删除</span></span><br><span class="line">    path(<span class="string">&#x27;delete/&#x27;</span>, show_delete),</span><br><span class="line">    <span class="comment"># 更新</span></span><br><span class="line">    path(<span class="string">&#x27;update/&#x27;</span>, show_update),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>然后修改<code>views.py</code>文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">show_select</span>(<span class="params">request</span>):</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;select.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_insert</span>(<span class="params">request</span>):</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;insert.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_delete</span>(<span class="params">request</span>):</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;delete.html&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_update</span>(<span class="params">request</span>):</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;update.html&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>可以尝试一下，这时从主站到各个功能页面的跳转功能也能使用了。</p>
+<h3 id="查询操作"><a class="markdownIt-Anchor" href="#查询操作"></a> 查询操作</h3>
+<h4 id="前端2"><a class="markdownIt-Anchor" href="#前端2"></a> 前端2</h4>
+<p>先填写<code>select.html</code>的内容：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;LuvSQL查询&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h2&gt;请输入您的查询内容&lt;/h2&gt;</span><br><span class="line">    &lt;form method=<span class="string">&quot;post&quot;</span> action=<span class="string">&quot;/select_result/&quot;</span>&gt;</span><br><span class="line">        &#123;% csrf_token %&#125;</span><br><span class="line">        &lt;h4&gt; From 项(只支持单表查询) &lt;/h4&gt;</span><br><span class="line">        &lt;label <span class="keyword">for</span>=<span class="string">&quot;From&quot;</span>&gt;查询的表格：&lt;/label&gt;</span><br><span class="line">        &lt;<span class="built_in">input</span> <span class="built_in">type</span>=<span class="string">&quot;text&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;From&quot;</span> name=<span class="string">&quot;From&quot;</span>&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">        &lt;h4&gt; Where 项(至多一项) &lt;/h4&gt;</span><br><span class="line">        &lt;label <span class="keyword">for</span>=<span class="string">&quot;Where&quot;</span>&gt;查询的条件：&lt;/label&gt;</span><br><span class="line">        &lt;<span class="built_in">input</span> <span class="built_in">type</span>=<span class="string">&quot;text&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;Where&quot;</span> name=<span class="string">&quot;Where&quot;</span>&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">        &lt;h4&gt; Select 项(允许*号) &lt;/h4&gt;</span><br><span class="line">        &lt;label <span class="keyword">for</span>=<span class="string">&quot;Select&quot;</span>&gt;查询的属性：&lt;/label&gt;</span><br><span class="line">        &lt;<span class="built_in">input</span> <span class="built_in">type</span>=<span class="string">&quot;text&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;Select&quot;</span> name=<span class="string">&quot;Select&quot;</span>&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">        &lt;<span class="built_in">input</span> <span class="built_in">type</span>=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;查询&quot;</span>&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>留意这个<code>action=&quot;/select_result/&quot;</code>这是发送请求的目的<strong>urls</strong>。</p>
+</blockquote>
+<p>运行一下，就能看到这个比较简陋的页面：</p>
+<img src="/images/2024-12-01/{637962F7-31A3-4E74-9ECD-B108BDDDF57F}.png" style="zoom:25%;" />
+<p>这里的查询逻辑写得很有限，但是无妨，功能都是可以扩展的。</p>
+<p>尝试一下查询，可以看到运行栏有这样的提示：</p>
+<img src="/images/2024-12-01/{F6BCFE8E-9932-41F7-93ED-7D949F75966E}.png" style="zoom:25%;" />
+<p>这就说明前端已经发送消息返回了。</p>
+<p>为了查看消息，接着我们在<code>views.py</code>文件里添加<code>select</code>的实现函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">select</span>(<span class="params">request</span>):                        <span class="comment"># 查询</span></span><br><span class="line">    _<span class="keyword">from</span> = request.POST.get(<span class="string">&#x27;From&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    _where = request.POST.get(<span class="string">&#x27;Where&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    _select = request.POST.get(<span class="string">&#x27;Select&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    context = &#123;</span><br><span class="line">        <span class="string">&#x27;From&#x27;</span>: _<span class="keyword">from</span>,</span><br><span class="line">        <span class="string">&#x27;Where&#x27;</span>: _where,</span><br><span class="line">        <span class="string">&#x27;Select&#x27;</span>: _select,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;select.html&#x27;</span>, context)</span><br></pre></td></tr></table></figure>
+<p>暂时先不进行表的查询，这里只是返回原本的查询语句。</p>
+<p>当然前端要通过<strong>urls</strong>调用这个函数，就要通过之前的<code>action=&quot;/select_result/&quot;</code>，我们还是将其加入<code>DjangoProject/urls.py</code>的对应位置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> LuvSQL.views <span class="keyword">import</span> select</span><br><span class="line">urlpatterns = [</span><br><span class="line">	<span class="comment"># 进行查询</span></span><br><span class="line">    path(<span class="string">&#x27;select_result/&#x27;</span>, select),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>接着给<code>select.html</code>里加入显示返回结果的标签：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>查询语句：</span><br><span class="line">Select ( &#123;&#123; Select  &#125;&#125; )</span><br><span class="line">From ( &#123;&#123; From &#125;&#125; )</span><br><span class="line">Where ( &#123;&#123; Where &#125;&#125; ) <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>尝试发送查询请求，就能看见网页结果了。</p>
+<blockquote>
+<p>其实这里的实现是有些别扭的，函数查询的主体不应该写在<code>views.py</code>中，不过小程序的话无妨。</p>
+</blockquote>
+<h4 id="后端2"><a class="markdownIt-Anchor" href="#后端2"></a> 后端2</h4>
+<p><strong>SQL</strong>的查询语句已经能在后端接收到了，接着我们要处理它，返回结果。</p>
+<p>在<code>models.py</code>中，</p>
+<p>先在各个<code>models.Model</code>的继承类中加入<code>col_list</code>列表，存放列名。</p>
+<p>写出查询函数，这里给我个人的实现方案：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">mod_select</span>(<span class="params">_<span class="keyword">from</span>, _where, _select</span>):         <span class="comment"># 查询</span></span><br><span class="line">    <span class="comment"># from</span></span><br><span class="line">    table = <span class="built_in">globals</span>().get(_<span class="keyword">from</span>)    <span class="comment"># globals()获取类</span></span><br><span class="line">    <span class="keyword">if</span> table <span class="keyword">is</span> <span class="literal">None</span>:               <span class="comment"># 没有这个表直接返回None</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="comment"># where</span></span><br><span class="line">    where_list = &#123;&#125;             <span class="comment"># 下面得到这个参数列表</span></span><br><span class="line">    <span class="keyword">if</span> _where == <span class="string">&#x27;&#x27;</span>:            <span class="comment"># 无条件查询</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">else</span>:                       <span class="comment"># 有条件则先分割条件</span></span><br><span class="line">        where_list_s = _where.split(<span class="string">&#x27;,&#x27;</span>)        <span class="comment"># 按逗号分隔</span></span><br><span class="line">        <span class="keyword">for</span> <span class="keyword">case</span> <span class="keyword">in</span> where_list_s:</span><br><span class="line">            temp = <span class="keyword">case</span>.split(<span class="string">&#x27;=&#x27;</span>)              <span class="comment"># 按等号分隔</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(temp)):</span><br><span class="line">                temp[i] = temp[i].strip()       <span class="comment"># 去除多余空格</span></span><br><span class="line">            where_list[temp[<span class="number">0</span>]] = temp[<span class="number">1</span>]       <span class="comment"># 放入结果中</span></span><br><span class="line">    <span class="comment"># select</span></span><br><span class="line">    select_list = []            <span class="comment"># 下面得到这个参数列表</span></span><br><span class="line">    <span class="keyword">if</span> _select == <span class="string">&#x27;*&#x27;</span>:          <span class="comment"># 全部查询</span></span><br><span class="line">        select_list = table.col_list</span><br><span class="line">    <span class="keyword">else</span>:                       <span class="comment"># 将要查找的列放入参数列表</span></span><br><span class="line">        select_list_s = _select.split(<span class="string">&#x27;,&#x27;</span>)              <span class="comment"># 按逗号分隔</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(select_list_s)):</span><br><span class="line">            select_list_s[i] = select_list_s[i].strip() <span class="comment"># 去除多余空格</span></span><br><span class="line">            select_list.append(select_list_s[i])        <span class="comment"># 放入结果中</span></span><br><span class="line">    <span class="comment"># 开始查询</span></span><br><span class="line">    <span class="comment"># 这里传两个参数列表</span></span><br><span class="line">    data_list = table.objects.<span class="built_in">filter</span>(**where_list).values(*select_list)</span><br><span class="line">    <span class="comment"># 这里得到的是一个dict的集合，每个dict是一行数据项，key为属性，val为内容</span></span><br><span class="line">    <span class="comment"># 返回查询结果</span></span><br><span class="line">    <span class="keyword">return</span> data_list</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这是后端处理查询请求的核心，可以看到这里只支持单表查询，目前阶段能这样就够了。</p>
+</blockquote>
+<p>在<code>views.py</code>开始导入刚才定义在<code>models.py</code>中的函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> LuvSQL.models <span class="keyword">import</span> mod_select</span><br></pre></td></tr></table></figure>
+<p>在<code>select</code>中调用这个函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">select</span>(<span class="params">request</span>):</span><br><span class="line">	<span class="comment"># 调用mod_select函数</span></span><br><span class="line">    result = mod_select(_<span class="keyword">from</span>, _where, _select)</span><br><span class="line">    <span class="built_in">print</span>(result)</span><br></pre></td></tr></table></figure>
+<p>这里使用了<code>print</code>函数，我们先给本地的<strong>MySQL</strong>的<strong>Book</strong>表中随便添加一项数据，方便测试。</p>
+<p>在网页中尝试查询刚才添加的项：</p>
+<img src="/images/2024-12-01/{9F3905D4-A023-4B49-8D0B-6B8D391BB16E}.png" style="zoom:25%;" />
+<p>本地应该能输出如下结果：</p>
+<img src="/images/2024-12-01/{9B1867A2-E130-4786-B723-96BD2FC241CE}.png" style="zoom:25%;" />
+<p>把它放入<code>content</code>中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 处理成带有换行符的字符串</span></span><br><span class="line">ret_s = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(result)):</span><br><span class="line">    ret_s += <span class="built_in">str</span>(result[i])</span><br><span class="line">    ret_s += <span class="string">&#x27;\n&#x27;</span></span><br><span class="line"><span class="comment"># 返回内容</span></span><br><span class="line">context = &#123;</span><br><span class="line">    <span class="string">&#x27;Result&#x27;</span>: ret_s,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>别忘了在<strong>html</strong>文件里加入显示结果的标签：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">h4</span>&gt;</span> 查询结果： <span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;white-space:pre&quot;</span>&gt;</span>&#123;&#123; Result &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>使用<code>&lt;div style=&quot;white-space:pre&quot;&gt;</code>是为了能让它换行</p>
+<p>这边显示结果比较潦草，感兴趣完全可以将结果装饰得好很多。</p>
+</blockquote>
+<p>对它使用查询吧！</p>
+<img src="/images/2024-12-01/{035838F0-8769-479E-AECC-E67D42790163}.png" style="zoom: 100%;" />
+<h4 id="解决一些简单的bug"><a class="markdownIt-Anchor" href="#解决一些简单的bug"></a> 解决一些简单的BUG</h4>
+<p>由于上面的<code>mod_select</code>函数在<code>table</code>输入不合法时会返回<strong>None</strong>，所以会产生问题，加一个特判即可：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 处理table填写错误或未填写的问题</span></span><br><span class="line"><span class="keyword">if</span> result <span class="keyword">is</span> <span class="literal">None</span>:      <span class="comment"># 直接返回即可</span></span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;select.html&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>当查询的<strong>Select</strong>项为空时，默认视为&quot;*&quot;即可，也方便了网页的查询填写：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># select</span></span><br><span class="line">select_list = []            <span class="comment"># 下面得到这个参数列表</span></span><br><span class="line"><span class="keyword">if</span> _select == <span class="string">&#x27;*&#x27;</span> <span class="keyword">or</span> _select == <span class="string">&quot;&quot;</span>:	  <span class="comment"># 全部查询</span></span><br><span class="line">    select_list = table.col_list</span><br><span class="line"><span class="keyword">else</span>:                       <span class="comment"># 将要查找的列放入参数列表</span></span><br><span class="line">    <span class="comment"># # #</span></span><br></pre></td></tr></table></figure>
+<p>如此一来，可以在只输入表名而不输入其他查询信息时返回整个表：</p>
+<img src="/images/2024-12-01/{D828E1B1-3C88-45BE-8CBC-F55CAA2039C3}.png" style="zoom: 100%;" />
+<p>那么一个简单实用的查询功能就做完了。</p>
+<blockquote>
+<p>当然，实际上的<strong>SQL</strong>语句解析应该是靠<strong>语法树</strong>解析得到的，这里的实现很直接也很简单，像遇到不存在的列名等问题会缺乏查错机制，不过都是可以完善的。</p>
+</blockquote>
+<h3 id="增添操作"><a class="markdownIt-Anchor" href="#增添操作"></a> 增添操作</h3>
+<h4 id="前端2-2"><a class="markdownIt-Anchor" href="#前端2-2"></a> 前端2</h4>
+<p>增、删、改这些操作是类似的，这里还是用同一个流程处理。</p>
+<p>先填写<code>insert.html</code>文件：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>LuvSQL插入<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>请输入您的插入内容<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">action</span>=<span class="string">&quot;/insert_result/&quot;</span>&gt;</span></span><br><span class="line">        &#123;% csrf_token %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">h4</span>&gt;</span> Into 项 <span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;Into&quot;</span>&gt;</span>插入的表格：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;Into&quot;</span> <span class="attr">name</span>=<span class="string">&quot;Into&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h4</span>&gt;</span> Values 项 <span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;Values&quot;</span>&gt;</span>插入值：(要求必须完整格式)<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;Values&quot;</span> <span class="attr">name</span>=<span class="string">&quot;Values&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;插入&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span> 插入语句：</span><br><span class="line">        Insert into ( &#123;&#123; Into  &#125;&#125; )</span><br><span class="line">        Values ( &#123;&#123; Values &#125;&#125; )<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h4</span>&gt;</span> 插入结果： <span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;white-space:pre&quot;</span>&gt;</span>&#123;&#123; Result &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>借鉴<strong>select</strong>功能，对应填写<code>urls.py</code>文件，以及<code>insert</code>函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">insert</span>(<span class="params">request</span>):                        <span class="comment"># 插入</span></span><br><span class="line">    <span class="comment"># 插入请求</span></span><br><span class="line">    _into = request.POST.get(<span class="string">&#x27;Into&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    _values = request.POST.get(<span class="string">&#x27;Values&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    <span class="comment"># 调用mod_insert函数</span></span><br><span class="line">    result = mod_insert(_into, _values)</span><br><span class="line">    <span class="comment"># 返回内容</span></span><br><span class="line">    context = &#123;</span><br><span class="line">        <span class="string">&#x27;Into&#x27;</span>: _into,</span><br><span class="line">        <span class="string">&#x27;Values&#x27;</span>: _values,</span><br><span class="line">        <span class="string">&#x27;Result&#x27;</span>: result,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;insert.html&#x27;</span>, context)</span><br></pre></td></tr></table></figure>
+<h4 id="后端2-2"><a class="markdownIt-Anchor" href="#后端2-2"></a> 后端2</h4>
+<p>设计<code>insert</code>函数如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">mod_insert</span>(<span class="params">_into, _values</span>):                 <span class="comment"># 插入</span></span><br><span class="line">    <span class="comment"># into</span></span><br><span class="line">    table = <span class="built_in">globals</span>().get(_into)  <span class="comment"># globals()获取类</span></span><br><span class="line">    <span class="keyword">if</span> table <span class="keyword">is</span> <span class="literal">None</span>:  <span class="comment"># 没有这个表直接返回None</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="comment"># values</span></span><br><span class="line">    values_list = &#123;&#125;  <span class="comment"># 下面得到这个参数列表</span></span><br><span class="line">    values_list_s = _values.split(<span class="string">&#x27;,&#x27;</span>)  <span class="comment"># 按逗号分隔</span></span><br><span class="line">    <span class="keyword">for</span> <span class="keyword">case</span> <span class="keyword">in</span> values_list_s:</span><br><span class="line">        temp = <span class="keyword">case</span>.split(<span class="string">&#x27;=&#x27;</span>)          <span class="comment"># 按等号分隔</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(temp)):</span><br><span class="line">            temp[i] = temp[i].strip()   <span class="comment"># 去除多余空格</span></span><br><span class="line">        values_list[temp[<span class="number">0</span>]] = temp[<span class="number">1</span>]  <span class="comment"># 放入结果中</span></span><br><span class="line">    <span class="comment"># 创建实体对象</span></span><br><span class="line">    obj = table.objects.create(**values_list)</span><br><span class="line">    <span class="comment"># 保存</span></span><br><span class="line">    obj.save()</span><br><span class="line">    <span class="comment"># 返回SUCCESS</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;SUCCESS&quot;</span></span><br></pre></td></tr></table></figure>
+<p>尝试一下，插入成功返回<strong>SUCCESS</strong>：</p>
+<img src="/images/2024-12-01/{F2F087DA-4F9E-40BA-B5CB-62BC812147FF}.png" style="zoom: 100%;" />
+<p>再查询一下，可以看到多了对应项：</p>
+<img src="/images/2024-12-01/{FCB76B08-DDE9-4C1F-BF14-0130327C4198}.png" style="zoom: 100%;" />
+<p>增添操作完成了。</p>
+<h3 id="删除操作"><a class="markdownIt-Anchor" href="#删除操作"></a> 删除操作</h3>
+<blockquote>
+<p>在清楚前两个操作的逻辑之后，其实希望之后的操作都能由读者自己完成。</p>
+</blockquote>
+<h4 id="前端2-3"><a class="markdownIt-Anchor" href="#前端2-3"></a> 前端2</h4>
+<p>先填写<code>delete.html</code>文件：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">&quot;en&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">&quot;UTF-8&quot;</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>LuvSQL删除<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>请输入您的删除内容<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">method</span>=<span class="string">&quot;post&quot;</span> <span class="attr">action</span>=<span class="string">&quot;/delete_result/&quot;</span>&gt;</span></span><br><span class="line">        &#123;% csrf_token %&#125;</span><br><span class="line">        <span class="tag">&lt;<span class="name">h4</span>&gt;</span> From 项 <span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;From&quot;</span>&gt;</span>删除的表格：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;From&quot;</span> <span class="attr">name</span>=<span class="string">&quot;From&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h4</span>&gt;</span> Where 项(只允许相等条件) <span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">label</span> <span class="attr">for</span>=<span class="string">&quot;Where&quot;</span>&gt;</span>删除的条件：<span class="tag">&lt;/<span class="name">label</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> <span class="attr">id</span>=<span class="string">&quot;Where&quot;</span> <span class="attr">name</span>=<span class="string">&quot;Where&quot;</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;删除&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">p</span>&gt;</span>删除语句：</span><br><span class="line">        Delete from ( &#123;&#123; From &#125;&#125; )</span><br><span class="line">        Where ( &#123;&#123; Where &#125;&#125; ) <span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">h4</span>&gt;</span> 删除结果： <span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">style</span>=<span class="string">&quot;white-space:pre&quot;</span>&gt;</span>&#123;&#123; Result &#125;&#125;<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后设计前端<code>delete</code>函数并补充相应设置：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">delete</span>(<span class="params">request</span>):                        <span class="comment"># 删除</span></span><br><span class="line">    <span class="comment"># 删除请求</span></span><br><span class="line">    _<span class="keyword">from</span> = request.POST.get(<span class="string">&#x27;From&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    _where = request.POST.get(<span class="string">&#x27;Where&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    <span class="comment"># 调用mod_delete函数</span></span><br><span class="line">    result = mod_delete(_<span class="keyword">from</span>, _where)</span><br><span class="line">    <span class="comment"># 返回内容</span></span><br><span class="line">    context = &#123;</span><br><span class="line">        <span class="string">&#x27;From&#x27;</span>: _<span class="keyword">from</span>,</span><br><span class="line">        <span class="string">&#x27;Where&#x27;</span>: _where,</span><br><span class="line">        <span class="string">&#x27;Result&#x27;</span>: result,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;delete.html&#x27;</span>, context)</span><br></pre></td></tr></table></figure>
+<h4 id="后端2-3"><a class="markdownIt-Anchor" href="#后端2-3"></a> 后端2</h4>
+<p>类似前面设计<code>mod_delete</code>函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">mod_delete</span>(<span class="params">_<span class="keyword">from</span>, _where</span>):                  <span class="comment"># 删除</span></span><br><span class="line">    <span class="comment"># from</span></span><br><span class="line">    table = <span class="built_in">globals</span>().get(_<span class="keyword">from</span>)    <span class="comment"># globals()获取类</span></span><br><span class="line">    <span class="keyword">if</span> table <span class="keyword">is</span> <span class="literal">None</span>:               <span class="comment"># 没有这个表直接返回None</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="comment"># where</span></span><br><span class="line">    where_list = &#123;&#125;             <span class="comment"># 下面得到这个参数列表</span></span><br><span class="line">    <span class="keyword">if</span> _where == <span class="string">&#x27;&#x27;</span>:            <span class="comment"># 无条件删除(即全删除)</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">else</span>:                       <span class="comment"># 有条件则先分割条件</span></span><br><span class="line">        where_list_s = _where.split(<span class="string">&#x27;,&#x27;</span>)    <span class="comment"># 按逗号分隔</span></span><br><span class="line">        <span class="keyword">for</span> <span class="keyword">case</span> <span class="keyword">in</span> where_list_s:</span><br><span class="line">            temp = <span class="keyword">case</span>.split(<span class="string">&#x27;=&#x27;</span>)          <span class="comment"># 按等号分隔</span></span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(temp)):</span><br><span class="line">                temp[i] = temp[i].strip()   <span class="comment"># 去除多余空格</span></span><br><span class="line">            where_list[temp[<span class="number">0</span>]] = temp[<span class="number">1</span>]   <span class="comment"># 放入结果中</span></span><br><span class="line">    <span class="comment"># 删除</span></span><br><span class="line">    <span class="comment"># 这里传参数列表</span></span><br><span class="line">    obj = table.objects.<span class="built_in">filter</span>(**where_list).delete()</span><br><span class="line">    <span class="comment"># 返回SUCCESS</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;SUCCESS&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这里的实现中，如果没有输入条件，就是认为删除所有数据项</p>
+</blockquote>
+<p>这里给<strong>Reader</strong>表先插入一个数据：</p>
+<img src="/images/2024-12-01/{97091B8A-7376-4183-A02C-235A409A9E69}.png" style="zoom: 100%;" />
+<p>然后可以尝试一下删除操作：</p>
+<img src="/images/2024-12-01/{6D6114F4-6F89-4C66-89ED-B22E22C78020}.png" style="zoom: 50%;" />
+<p>查询<strong>Reader</strong>表，应该是一个空表：</p>
+<img src="/images/2024-12-01/{23C276D4-055D-4B93-8D58-4710B9CB73EA}.png" style="zoom:50%;" />
+<p>删除操作完成了。</p>
+<h3 id="更新操作"><a class="markdownIt-Anchor" href="#更新操作"></a> 更新操作</h3>
+<h4 id="前端2-4"><a class="markdownIt-Anchor" href="#前端2-4"></a> 前端2</h4>
+<p>更新的话，我希望能有一个更新前后的对比，所以先执行一次查询操作，再执行更新操作，都返回表项，并列展示。</p>
+<p>先填写<code>update.html</code>文件：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;LuvSQL更新&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;h2&gt;请输入您的更新内容&lt;/h2&gt;</span><br><span class="line">    &lt;form method=<span class="string">&quot;post&quot;</span> action=<span class="string">&quot;/update_result/&quot;</span>&gt;</span><br><span class="line">        &#123;% csrf_token %&#125;</span><br><span class="line">        &lt;h4&gt; Update 项 &lt;/h4&gt;</span><br><span class="line">        &lt;label <span class="keyword">for</span>=<span class="string">&quot;Update&quot;</span>&gt;更新的表格：&lt;/label&gt;</span><br><span class="line">        &lt;<span class="built_in">input</span> <span class="built_in">type</span>=<span class="string">&quot;text&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;Update&quot;</span> name=<span class="string">&quot;Update&quot;</span>&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">        &lt;h4&gt; Where 项(只允许相等条件) &lt;/h4&gt;</span><br><span class="line">        &lt;label <span class="keyword">for</span>=<span class="string">&quot;Where&quot;</span>&gt;更新的条件：&lt;/label&gt;</span><br><span class="line">        &lt;<span class="built_in">input</span> <span class="built_in">type</span>=<span class="string">&quot;text&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;Where&quot;</span> name=<span class="string">&quot;Where&quot;</span>&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">        &lt;h4&gt; <span class="type">Set</span> 项 &lt;/h4&gt;</span><br><span class="line">        &lt;label <span class="keyword">for</span>=<span class="string">&quot;Set&quot;</span>&gt;更新的属性：&lt;/label&gt;</span><br><span class="line">        &lt;<span class="built_in">input</span> <span class="built_in">type</span>=<span class="string">&quot;text&quot;</span> <span class="built_in">id</span>=<span class="string">&quot;Set&quot;</span> name=<span class="string">&quot;Set&quot;</span>&gt;&lt;br&gt;&lt;br&gt;</span><br><span class="line">        &lt;<span class="built_in">input</span> <span class="built_in">type</span>=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;更新&quot;</span>&gt;</span><br><span class="line">        &lt;p&gt; 更新语句：</span><br><span class="line">        Update ( &#123;&#123; Update  &#125;&#125; )</span><br><span class="line">        <span class="type">Set</span> ( &#123;&#123; <span class="type">Set</span> &#125;&#125; )</span><br><span class="line">        Where ( &#123;&#123; Where &#125;&#125; ) &lt;/p&gt;</span><br><span class="line">        &lt;h4&gt; 更新结果(更新前)： &lt;/h4&gt;</span><br><span class="line">        &lt;div style=<span class="string">&quot;white-space:pre&quot;</span>&gt;&#123;&#123; Result1 &#125;&#125;&lt;/div&gt;</span><br><span class="line">        &lt;h4&gt; 更新结果(更新后)： &lt;/h4&gt;</span><br><span class="line">        &lt;div style=<span class="string">&quot;white-space:pre&quot;</span>&gt;&#123;&#123; Result2 &#125;&#125;&lt;/div&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<p>这时候<code>views.py</code>和<code>models.py</code>分离的好处就体现出来了，可以简洁地先调用一次<code>mod_select</code>再调用一次<code>mod_update</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">update</span>(<span class="params">request</span>):                        <span class="comment"># 更新</span></span><br><span class="line">    <span class="comment"># 更新请求</span></span><br><span class="line">    _update = request.POST.get(<span class="string">&#x27;Update&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    _<span class="built_in">set</span> = request.POST.get(<span class="string">&#x27;Set&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    _where = request.POST.get(<span class="string">&#x27;Where&#x27;</span>, <span class="string">&#x27;no_found&#x27;</span>)</span><br><span class="line">    <span class="comment"># 先调用mod_select函数</span></span><br><span class="line">    result1 = mod_select(_update, _where, <span class="string">&#x27;*&#x27;</span>)</span><br><span class="line">    <span class="comment"># 处理table填写错误或未填写的问题</span></span><br><span class="line">    <span class="keyword">if</span> result1 <span class="keyword">is</span> <span class="literal">None</span>:  <span class="comment"># 直接返回即可</span></span><br><span class="line">        <span class="keyword">return</span> render(request, <span class="string">&#x27;update.html&#x27;</span>)</span><br><span class="line">    <span class="comment"># 处理成带有换行符的字符串(略)</span></span><br><span class="line">    <span class="comment"># 然后调用mod_update函数</span></span><br><span class="line">    result2 = mod_update(_update, _<span class="built_in">set</span>, _where)</span><br><span class="line">    <span class="comment"># 处理成带有换行符的字符串(略)</span></span><br><span class="line">    <span class="comment"># 返回内容</span></span><br><span class="line">    context = &#123;</span><br><span class="line">        <span class="string">&#x27;Update&#x27;</span>: _update,</span><br><span class="line">        <span class="string">&#x27;Set&#x27;</span>: _<span class="built_in">set</span>,</span><br><span class="line">        <span class="string">&#x27;Where&#x27;</span>: _where,</span><br><span class="line">        <span class="string">&#x27;Result1&#x27;</span>: ret_s_1,</span><br><span class="line">        <span class="string">&#x27;Result2&#x27;</span>: ret_s_2,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">&#x27;update.html&#x27;</span>, context)</span><br></pre></td></tr></table></figure>
+<h4 id="后端2-4"><a class="markdownIt-Anchor" href="#后端2-4"></a> 后端2</h4>
+<p>在<code>models.py</code>设计<code>mod_update</code>函数如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">mod_update</span>(<span class="params">_update, _<span class="built_in">set</span>, _where</span>):          <span class="comment"># 更新</span></span><br><span class="line">    <span class="comment"># update</span></span><br><span class="line">    table = <span class="built_in">globals</span>().get(_update)  <span class="comment"># globals()获取类</span></span><br><span class="line">    <span class="keyword">if</span> table <span class="keyword">is</span> <span class="literal">None</span>:               <span class="comment"># 没有这个表直接返回None</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="comment"># where</span></span><br><span class="line">    where_list = &#123;&#125;         <span class="comment"># 下面得到这个参数列表</span></span><br><span class="line">    <span class="keyword">if</span> _where == <span class="string">&#x27;&#x27;</span>:        <span class="comment"># 无条件更新(即全更新)</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">else</span>:                   <span class="comment"># 有条件则先分割条件(略)</span></span><br><span class="line">    <span class="comment"># set</span></span><br><span class="line">    set_list = &#123;&#125;           <span class="comment"># 下面得到这个参数列表</span></span><br><span class="line">    <span class="keyword">if</span> _<span class="built_in">set</span> == <span class="string">&#x27;&#x27;</span>:          <span class="comment"># 这项没有则不更新了</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">else</span>:                   <span class="comment"># 分割更新项(略)</span></span><br><span class="line">    <span class="comment"># 开始更新</span></span><br><span class="line">    <span class="comment"># 这里分别传两个参数列表</span></span><br><span class="line">    data_list = table.objects.<span class="built_in">filter</span>(**where_list)</span><br><span class="line">    data_list.update(**set_list)</span><br><span class="line">    <span class="comment"># 这里得到的是一个dict的集合，每个dict是一行数据项，key为属性，val为内容</span></span><br><span class="line">    <span class="comment"># 向select一样返回更新结果</span></span><br><span class="line">    <span class="keyword">return</span> data_list.values()</span><br></pre></td></tr></table></figure>
+<p>重新向<strong>Reader</strong>表插入项：</p>
+<img src="/images/2024-12-01/{B5D3D328-C352-4E94-809B-7F4DB02376D6}.png" style="zoom: 100%;" />
+<p>尝试修改该项，让<strong>项羽</strong>回归<strong>西楚霸王</strong>：</p>
+<img src="/images/2024-12-01/{5F2AC270-62DF-4914-8497-2596773077BC}.png" style="zoom: 50%;" />
+<p>更新操作完成了。</p>
+<h3 id="功能完善"><a class="markdownIt-Anchor" href="#功能完善"></a> 功能完善</h3>
+<h4 id="子页面向主页的返回"><a class="markdownIt-Anchor" href="#子页面向主页的返回"></a> 子页面向主页的返回</h4>
+<p>在测试的过程中发现，每次从子页面回主页面要手动修改<strong>url</strong>，有点废手，在各个子页面里添加回主页的标签：</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;../&quot;</span>&gt;</span> <span class="tag">&lt;<span class="name">h2</span>&gt;</span>回到主页<span class="tag">&lt;/<span class="name">h2</span>&gt;</span> <span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这样就能方便返回主页了：</p>
+<img src="/images/2024-12-01/{9D957739-F49A-4C13-BD53-7223A7B5E54D}.png" style="zoom:25%;" />
+<h2 id="完结撒花"><a class="markdownIt-Anchor" href="#完结撒花"></a> 完结撒花</h2>
+<p>恭喜，到此为止你完成了一个简单的<strong>Web</strong>数据库。</p>
+<blockquote>
+<p>其实本来还想加上CSS使得网页更好看的，结果由于<strong>跨域请求</strong>等问题就放弃了。没事的，这一次写这个<strong>Web</strong>还是让我自身也回顾了很多东西。</p>
+</blockquote>
+<p>ο(=•ω＜=)ρ⌒☆</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://luvreadunion.com/2024/12/01/%E5%8A%A8%E6%89%8B%E9%80%9A%E8%BF%87Django%E5%BB%BA%E7%AB%8BWeb%E6%95%B0%E6%8D%AE%E5%BA%93/" data-id="cmbxk3yg9001rhg9q39vh4cvn" data-title="动手通过Django建立Web数据库" class="article-share-link">分享</a>
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Django/" rel="tag">Django</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Web/" rel="tag">Web</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag">数据库</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" class="wow fadeInUp">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          <img data-src="/images/94011406.webp" data-sizes="auto" alt="Paxos一致性算法" class="lazyload">
+        
+        <a href="/2025/01/01/Paxos%E4%B8%80%E8%87%B4%E6%80%A7%E7%AE%97%E6%B3%95/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            Paxos一致性算法
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/images/86446038.avif" data-sizes="auto" alt="OS填空题真题题解" class="lazyload">
+      
+      <a href="/2024/09/09/OS%E5%A1%AB%E7%A9%BA%E9%A2%98%E7%9C%9F%E9%A2%98%E9%A2%98%E8%A7%A3/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          OS填空题真题题解
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrap wow fadeInRight wrap-sticky">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E7%99%BD"><span class="toc-number">1.</span> <span class="toc-text"> 开场白</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%9A%E7%94%A8%E5%BB%BA%E7%AB%8Bweb%E6%9F%A5%E8%AF%A2%E6%8C%87%E5%8D%97"><span class="toc-number">2.</span> <span class="toc-text"> 数据库通用建立WEB查询指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-number">2.1.</span> <span class="toc-text"> 写在前面</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 环境准备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E5%BC%8F%E5%BC%80%E5%A7%8B"><span class="toc-number">2.2.</span> <span class="toc-text"> 正式开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF1"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 后端1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.2.1.1.</span> <span class="toc-text"> 创建数据库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#orm"><span class="toc-number">2.2.1.2.</span> <span class="toc-text"> ORM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A1%A8%E7%9A%84%E6%A8%A1%E5%9E%8B-%E5%AF%BC%E5%85%A5%E8%A1%A8"><span class="toc-number">2.2.1.3.</span> <span class="toc-text"> 创建表的模型、导入表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF1"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 前端1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E7%AB%99"><span class="toc-number">2.2.2.1.</span> <span class="toc-text"> 主站</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.2.2.2.</span> <span class="toc-text"> 表服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.3.</span> <span class="toc-text"> 查询操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF2"><span class="toc-number">2.2.3.1.</span> <span class="toc-text"> 前端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF2"><span class="toc-number">2.2.3.2.</span> <span class="toc-text"> 后端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84bug"><span class="toc-number">2.2.3.3.</span> <span class="toc-text"> 解决一些简单的BUG</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E6%B7%BB%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.4.</span> <span class="toc-text"> 增添操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF2-2"><span class="toc-number">2.2.4.1.</span> <span class="toc-text"> 前端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF2-2"><span class="toc-number">2.2.4.2.</span> <span class="toc-text"> 后端2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.5.</span> <span class="toc-text"> 删除操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF2-3"><span class="toc-number">2.2.5.1.</span> <span class="toc-text"> 前端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF2-3"><span class="toc-number">2.2.5.2.</span> <span class="toc-text"> 后端2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.6.</span> <span class="toc-text"> 更新操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF2-4"><span class="toc-number">2.2.6.1.</span> <span class="toc-text"> 前端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF2-4"><span class="toc-number">2.2.6.2.</span> <span class="toc-text"> 后端2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%AE%8C%E5%96%84"><span class="toc-number">2.2.7.</span> <span class="toc-text"> 功能完善</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%90%E9%A1%B5%E9%9D%A2%E5%90%91%E4%B8%BB%E9%A1%B5%E7%9A%84%E8%BF%94%E5%9B%9E"><span class="toc-number">2.2.7.1.</span> <span class="toc-text"> 子页面向主页的返回</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E7%BB%93%E6%92%92%E8%8A%B1"><span class="toc-number">2.3.</span> <span class="toc-text"> 完结撒花</span></a></li></ol></li></ol></div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+    
+      <div class="sidebar-btn-wrapper" style="position:static">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+    
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer" class="wow fadeInUp">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      <div>
+        <span class="icon-copyright"></span>
+        2020-2025
+        <span class="footer-info-sep"></span>
+        Luv
+      </div>
+      
+        <div>
+          基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+          Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+        </div>
+      
+      
+        <div>
+          <span class="icon-brush"></span>
+          106.3k
+          &nbsp;|&nbsp;
+          <span class="icon-coffee"></span>
+          06:41
+        </div>
+      
+      
+        <div>
+          <span class="icon-eye"></span>
+          <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+          &nbsp;|&nbsp;
+          <span class="icon-user"></span>
+          <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+        </div>
+      
+    </div>
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E7%99%BD"><span class="toc-number">1.</span> <span class="toc-text"> 开场白</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%9A%E7%94%A8%E5%BB%BA%E7%AB%8Bweb%E6%9F%A5%E8%AF%A2%E6%8C%87%E5%8D%97"><span class="toc-number">2.</span> <span class="toc-text"> 数据库通用建立WEB查询指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2"><span class="toc-number">2.1.</span> <span class="toc-text"> 写在前面</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 环境准备</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E5%BC%8F%E5%BC%80%E5%A7%8B"><span class="toc-number">2.2.</span> <span class="toc-text"> 正式开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF1"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 后端1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.2.1.1.</span> <span class="toc-text"> 创建数据库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#orm"><span class="toc-number">2.2.1.2.</span> <span class="toc-text"> ORM</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E8%A1%A8%E7%9A%84%E6%A8%A1%E5%9E%8B-%E5%AF%BC%E5%85%A5%E8%A1%A8"><span class="toc-number">2.2.1.3.</span> <span class="toc-text"> 创建表的模型、导入表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF1"><span class="toc-number">2.2.2.</span> <span class="toc-text"> 前端1</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%BB%E7%AB%99"><span class="toc-number">2.2.2.1.</span> <span class="toc-text"> 主站</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E6%9C%8D%E5%8A%A1"><span class="toc-number">2.2.2.2.</span> <span class="toc-text"> 表服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.3.</span> <span class="toc-text"> 查询操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF2"><span class="toc-number">2.2.3.1.</span> <span class="toc-text"> 前端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF2"><span class="toc-number">2.2.3.2.</span> <span class="toc-text"> 后端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E4%B8%80%E4%BA%9B%E7%AE%80%E5%8D%95%E7%9A%84bug"><span class="toc-number">2.2.3.3.</span> <span class="toc-text"> 解决一些简单的BUG</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A2%9E%E6%B7%BB%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.4.</span> <span class="toc-text"> 增添操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF2-2"><span class="toc-number">2.2.4.1.</span> <span class="toc-text"> 前端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF2-2"><span class="toc-number">2.2.4.2.</span> <span class="toc-text"> 后端2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.5.</span> <span class="toc-text"> 删除操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF2-3"><span class="toc-number">2.2.5.1.</span> <span class="toc-text"> 前端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF2-3"><span class="toc-number">2.2.5.2.</span> <span class="toc-text"> 后端2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%96%B0%E6%93%8D%E4%BD%9C"><span class="toc-number">2.2.6.</span> <span class="toc-text"> 更新操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%89%8D%E7%AB%AF2-4"><span class="toc-number">2.2.6.1.</span> <span class="toc-text"> 前端2</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%90%8E%E7%AB%AF2-4"><span class="toc-number">2.2.6.2.</span> <span class="toc-text"> 后端2</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%AE%8C%E5%96%84"><span class="toc-number">2.2.7.</span> <span class="toc-text"> 功能完善</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AD%90%E9%A1%B5%E9%9D%A2%E5%90%91%E4%B8%BB%E9%A1%B5%E7%9A%84%E8%BF%94%E5%9B%9E"><span class="toc-number">2.2.7.1.</span> <span class="toc-text"> 子页面向主页的返回</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%8C%E7%BB%93%E6%92%92%E8%8A%B1"><span class="toc-number">2.3.</span> <span class="toc-text"> 完结撒花</span></a></li></ol></li></ol></div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    <div class="site-search">
+      <div class="reimu-popup popup">
+        <div class="reimu-search">
+          <span class="reimu-search-input-icon"></span>
+          <div class="reimu-search-input" id="reimu-search-input"></div>
+        </div>
+        <div class="reimu-results">
+          <div id="reimu-stats"></div>
+          <div id="reimu-hits"></div>
+          <div id="reimu-pagination" class="reimu-pagination"></div>
+        </div>
+        <span class="popup-btn-close"></span>
+      </div>
+    </div>
+    
+<script src="https://npm.webcache.cn/jquery@3.7.1/dist/jquery.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <script>
+    if (window.mermaid) {
+      // https://github.com/mermaid-js/mermaid/issues/1945
+      const elementCode = '.mermaid'
+      const saveOriginalData = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if (element.getAttribute('data-original-code') == null){
+                element.setAttribute('data-original-code', element.innerHTML)
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      }
+      const resetProcessed = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if(element.getAttribute('data-original-code') != null){
+                element.removeAttribute('data-processed')
+                element.innerHTML = element.getAttribute('data-original-code')
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      } 
+      const loadMermaid = (theme) => {
+        window.mermaid.initialize({theme})
+        window.mermaid.init({theme}, document.querySelectorAll(elementCode))
+      }
+      document.body.addEventListener('dark-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('dark'))
+        .catch(console.error)
+      })
+      document.body.addEventListener('light-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('default'))
+        .catch(console.error)
+      })
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/algoliasearch@4.17.1/dist/algoliasearch-lite.umd.js"></script>
+
+  
+<script src="https://npm.webcache.cn/instantsearch.js@4.56.1/dist/instantsearch.production.min.js"></script>
+
+  
+<script src="/js/algolia_search.js"></script>
+
+  <script>
+    var CONFIG = {
+      root: '/',
+      algolia: {
+        applicationID: "37ZQYZE607",
+        apiKey: "dfdbcdcf987c68afcf35a63def2936e2",
+        indexName: "Luv",
+        hits: {
+          "per_page": parseInt("10")
+        },
+        labels: {
+          "input_placeholder": "搜索.....",
+          "hits_empty": "未发现与 「${query}」相关内容",
+          "hits_stats": "找到${hits}条结果（用时 ${time} ms）"
+        }
+      }
+    };
+  </script>
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    firework(JSON.parse('{"excludeElements":["a"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+  <!-- hexo injector body_end start -->
+<script src="/js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+

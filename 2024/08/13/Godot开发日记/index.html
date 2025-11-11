@@ -1,0 +1,858 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <title>
+    Godot开发日记 |
+    
+    Luv Read Union
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic%7CUbuntu%20Mono:400,400italic,700,700italic&display=swap&subset=latin,latin-ext" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="/css/loader.css">
+
+  <meta name="description" content="开场白 半夜忽惊起，写下一个绝妙的游戏点子。 那就开始做吧。 希望在开学前做出一个游戏DEMO。 开始学习Godot！ o((&gt;ω&lt; ))o  Godot  Godot 关键概念 在 Godot 中，游戏就是一棵由节点构成的树，树又可以结合起来构成场景。然后你还可以将这些节点连起来，让它们通过信号进行通信。  场景 场景可以是一个角色、一件武器、用户界面中的一个菜单、一座房子、整个关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Godot开发日记">
+<meta property="og:url" content="https://luvreadunion.com/2024/08/13/Godot%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Luv Read Union">
+<meta property="og:description" content="开场白 半夜忽惊起，写下一个绝妙的游戏点子。 那就开始做吧。 希望在开学前做出一个游戏DEMO。 开始学习Godot！ o((&gt;ω&lt; ))o  Godot  Godot 关键概念 在 Godot 中，游戏就是一棵由节点构成的树，树又可以结合起来构成场景。然后你还可以将这些节点连起来，让它们通过信号进行通信。  场景 场景可以是一个角色、一件武器、用户界面中的一个菜单、一座房子、整个关">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-08-13T08:50:52.000Z">
+<meta property="article:modified_time" content="2024-08-13T08:13:15.918Z">
+<meta property="article:author" content="Luv">
+<meta property="article:tag" content="学习">
+<meta property="article:tag" content="Godot">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Luv Read Union" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/typeface-source-code-pro@1.1.13/index.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/katex@0.16.9/dist/katex.min.css">
+
+  
+  
+  
+  
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/wowjs@1.1.3/css/libs/animate.css">
+
+    
+<script src="https://npm.webcache.cn/wowjs@1.1.3/dist/wow.min.js"></script>
+
+    <script>
+      new WOW({
+        offset: 0,
+        mobile: true,
+        live: false
+      }).init();
+    </script>
+  
+  
+    <script src="/sw.js"></script>
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg"></div>
+    <div class="loading-right-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff6e6b" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z" fill="#fd0d00" />
+          <path d="M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95" fill="#fd0d00" />
+        </svg>
+      </div>
+      <div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    const startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    const endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('load', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/images/76198326.avif" alt="Godot开发日记">
+  
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <div id="logo-wrap">
+        
+          
+          
+            <a href="/" id="logo">
+              <h1>Godot开发日记</h1>
+            </a>
+          
+        
+      </div>
+      
+        
+        <h2 id="subtitle-wrap">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content" class="outer">
+          
+          <section id="main"><article id="post-Godot开发日记" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner">
+    <div class="article-meta">
+      <div class="article-date wow slideInLeft">
+  <a href="/2024/08/13/Godot%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" class="article-date-link">
+    <time datetime="2024-08-13T08:50:52.000Z" itemprop="datePublished">2024-08-13</time>
+  </a>
+</div>
+
+      
+  <div class="article-category wow slideInLeft">
+    <a class="article-category-link" href="/categories/%E5%AD%A6%E4%B9%A0/">学习</a><a class="article-category-link" href="/categories/%E6%B8%B8%E6%88%8F%E5%88%B6%E4%BD%9C/">游戏制作</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="开场白"><a class="markdownIt-Anchor" href="#开场白"></a> 开场白</h1>
+<p>半夜忽惊起，写下一个<strong>绝妙的</strong>游戏点子。</p>
+<p>那就开始做吧。</p>
+<p>希望在开学前做出一个<strong>游戏DEMO</strong>。</p>
+<p>开始学习<strong>Godot</strong>！</p>
+<p>o((&gt;ω&lt; ))o</p>
+<h1 id="godot"><a class="markdownIt-Anchor" href="#godot"></a> Godot</h1>
+<h3 id="godot-关键概念"><a class="markdownIt-Anchor" href="#godot-关键概念"></a> Godot 关键概念</h3>
+<p>在 <strong>Godot</strong> 中，游戏就是一棵由<strong>节点</strong>构成的<strong>树</strong>，树又可以结合起来构成<strong>场景</strong>。然后你还可以将这些节点连起来，让它们通过<strong>信号</strong>进行通信。</p>
+<h4 id="场景"><a class="markdownIt-Anchor" href="#场景"></a> 场景</h4>
+<p>场景可以是一个角色、一件武器、用户界面中的一个菜单、一座房子、整个关卡，或者任何你能想到的东西。</p>
+<p>场景可以嵌套。</p>
+<h4 id="节点"><a class="markdownIt-Anchor" href="#节点"></a> 节点</h4>
+<p>场景由若干<strong>节点</strong>组成。节点是游戏最小的构件，排列成树状。</p>
+<p>所有节点都具备以下特性：</p>
+<ul>
+<li>名称。</li>
+<li>可编辑的属性。</li>
+<li>每帧都可以接收回调以进行更新。</li>
+<li>你可以使用新的属性和函数来进行扩展。</li>
+<li>你可以将它们添加为其他节点的子节点。</li>
+</ul>
+<h4 id="场景树"><a class="markdownIt-Anchor" href="#场景树"></a> 场景树</h4>
+<p>游戏的所有场景都汇集在<strong>场景树</strong>中。由于场景是节点树，因此场景树也是节点树。但是，从场景的角度来考虑你的游戏更容易，因为它们可以代表角色、武器、门或你的用户界面。</p>
+<h4 id="信号"><a class="markdownIt-Anchor" href="#信号"></a> 信号</h4>
+<p>节点在发生某些事件时发出信号。此功能无需在代码中硬连接它们就能让节点相互通信。它为你提供了构建场景的灵活性。</p>
+<h3 id="快捷键"><a class="markdownIt-Anchor" href="#快捷键"></a> 快捷键</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F5</td>
+<td>开始运行项目</td>
+</tr>
+<tr>
+<td>F8</td>
+<td>结束运行项目</td>
+</tr>
+<tr>
+<td>Ctrl + D</td>
+<td>创建副本</td>
+</tr>
+<tr>
+<td>F6</td>
+<td>运行当前场景</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gdscript"><a class="markdownIt-Anchor" href="#gdscript"></a> GDScript</h2>
+<h3 id="基础知识"><a class="markdownIt-Anchor" href="#基础知识"></a> 基础知识</h3>
+<h4 id="函数"><a class="markdownIt-Anchor" href="#函数"></a> 函数</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func name(p1, p2):</span><br><span class="line">	instruction_1</span><br><span class="line">	instruction_2</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>函数内容不能为空，可以像<strong>python</strong>一样使用<code>pass</code>语句进行占位。</p>
+</blockquote>
+<h4 id="变量"><a class="markdownIt-Anchor" href="#变量"></a> 变量</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var name = 10</span><br></pre></td></tr></table></figure>
+<p>变量的使用类似于标签。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var name = 10</span><br><span class="line">name = &quot;text&quot;</span><br><span class="line">print(name)</span><br><span class="line"># 输出“text”</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>变量或值之间的比较只有“&gt;”、“&lt;”、“==”、“!=”符号，没有“&lt;=”和“&gt;=”。</p>
+</blockquote>
+<h4 id="gameloop-特殊函数-_processdelta"><a class="markdownIt-Anchor" href="#gameloop-特殊函数-_processdelta"></a> GameLoop 特殊函数 _process(delta)</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func _process(delta):			# delta是唯一的参数</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
+<p>在执行完<code>set_process(true)</code>语句后该函数会一直循环执行。</p>
+<p>每个游戏中的对象都有一个各自的<code>_process(delta)</code></p>
+<blockquote>
+<p><strong>Godot</strong>引擎会尝试尽量让该函数执行更快更频繁，使得画面更流畅。</p>
+<p>每次运行的时间间隔就是 <strong>帧(Frame)</strong>。</p>
+</blockquote>
+<p><code>delta</code>表示是从上一次执行<code>_process()</code>开始到当前时刻的时间间隔。(应用时其实就是相邻两帧之间的时间。)</p>
+<p>因为帧之间的时间间隔是随时改变的，那么在不使用<code>delta</code>的情况下，场景的变换速率也是随时改变的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func _process(delta):</span><br><span class="line">	rotate(3.0)</span><br><span class="line"># 这是一个速度不稳定的旋转</span><br></pre></td></tr></table></figure>
+<p>这时给它的参数乘上一个<code>delta</code>就可以使它能够匀速旋转，即使游戏的帧数正在改变：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func _process(delta):</span><br><span class="line">	rotate(3.0 * delta)</span><br><span class="line"># 这是一个速度稳定的旋转</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这其实就是所谓的让 像“自旋速率”这样与时间相关的变量 从“<strong>帧独立(frame-dependent)</strong>”转变成“<strong>时间独立(time-dependent)</strong>”。</p>
+<p>那么与<code>delta</code>相乘的值其实就是每秒的速率。</p>
+</blockquote>
+<h4 id="if语句和while语句"><a class="markdownIt-Anchor" href="#if语句和while语句"></a> if语句和while语句</h4>
+<p><strong>GDScript</strong>中<strong>if</strong>语句、<strong>while</strong>语句用法与<strong>python</strong>相同。</p>
+<blockquote>
+<p><strong>for</strong>语句</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">for number in range(3):</span><br><span class="line">	print(number)</span><br><span class="line"># 0 1 2</span><br><span class="line"># 与 for number in [0, 1, 2]:</span><br><span class="line">#    	print(number)</span><br><span class="line"># 等价</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="2d-vectors"><a class="markdownIt-Anchor" href="#2d-vectors"></a> 2D Vectors</h4>
+<p>下面语句等价：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">position -= Vector2(50,0)</span><br><span class="line"></span><br><span class="line">position.x -= 50</span><br><span class="line">position.y -= 0</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>“=”、“+=”、“*=”、“/=”类似。</p>
+</blockquote>
+<h4 id="array"><a class="markdownIt-Anchor" href="#array"></a> array</h4>
+<p><strong>array</strong>的使用与<strong>python</strong>中的列表基本一致。</p>
+<p><strong>String</strong>类型就是储存字符的<strong>array</strong>。</p>
+<blockquote>
+<p>将<strong>array</strong>用作队列：<code>append()</code>、<code>pop_front()</code></p>
+<p>将<strong>array</strong>用作栈：<code>append()</code>、<code>pop_back()</code></p>
+<p>通过<code>.size()</code>访问大小。</p>
+</blockquote>
+<h4 id="dictionary"><a class="markdownIt-Anchor" href="#dictionary"></a> dictionary</h4>
+<p><strong>dictionary</strong>的使用与<strong>python</strong>中的字典基本一致。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var dict = &#123;</span><br><span class="line">	&quot;key&quot; : val,</span><br><span class="line">	...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>向字典中添加键值对的方法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dict[key] += val			# 使用“=”也可</span><br></pre></td></tr></table></figure>
+<p>使用<code>.keys()</code>遍历所有的<strong>key</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for item_name in dict.keys():</span><br><span class="line">	print(item_name)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>实际上，可以省略<code>.keys()</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for item_name in dict:</span><br><span class="line">	print(item_name)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>此时，使用<code>dict[key]</code>获取对应<strong>value</strong>。</p>
+<blockquote>
+<p>在保证唯一性的情况下，可以使用任何类型作为<strong>key</strong>。</p>
+<p>而<strong>value</strong>的类型可能受到的限制就多一些。</p>
+</blockquote>
+<h4 id="数据类型"><a class="markdownIt-Anchor" href="#数据类型"></a> 数据类型</h4>
+<p>使用<code>int()</code>、<code>float()</code>、<code>str()</code>进行类型转换。</p>
+<p><strong>Vector2</strong>类型与单个数字进行乘除是兼容的，但加减不行。</p>
+<p>整数除法如&quot;<strong>3/2</strong>&quot;默认是去除小数部分，需要改为&quot;<strong>3/2.0</strong>&quot;才会得到<strong>1.5</strong>。</p>
+<blockquote>
+<p>让一个整数乘<strong>1.0</strong>即可变为浮点型。</p>
+</blockquote>
+<h4 id="可选的显式数据类型"><a class="markdownIt-Anchor" href="#可选的显式数据类型"></a> 可选的显式数据类型</h4>
+<p>使用如下显式的数据类型定义来避免类型使用错误：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var variable_name: Type = value</span><br></pre></td></tr></table></figure>
+<p>更进一步可以简写为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">var variable_name := value</span><br></pre></td></tr></table></figure>
+<h3 id="实战知识"><a class="markdownIt-Anchor" href="#实战知识"></a> 实战知识</h3>
+<h4 id="extends"><a class="markdownIt-Anchor" href="#extends"></a> extends</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extends Sprite2D</span><br></pre></td></tr></table></figure>
+<p>每个 <strong>GDScript</strong> 文件都是一个隐含的类。<code>extends</code> 关键字定义了这个脚本所继承或扩展的类。本例中为<code>Sprite2D</code>，意味着我们的脚本将获得 <strong>Sprite2D</strong> 节点的所有属性和方法，包括它继承的 <code>Node2D</code>、<code>CanvasItem</code>、<code>Node</code> 等类。</p>
+<h4 id="_init"><a class="markdownIt-Anchor" href="#_init"></a> _init()</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func _init():</span><br><span class="line">	...</span><br></pre></td></tr></table></figure>
+<p>让我们把它分解一下。 <code>func</code> 关键字定义了一个名为 <code>_init</code> 的新函数。这是类构造函数的一个特殊名称。如果你定义了这个函数，引擎会在内存中创建每个对象或节点时调用 <code>_init()</code> 。</p>
+<h4 id="_processdelta"><a class="markdownIt-Anchor" href="#_processdelta"></a> _process(delta)</h4>
+<p>参考上文基础知识。</p>
+<blockquote>
+<p>请注意 <code>_process()</code> 和 <code>_init()</code> 一样都是以下划线开头的。按照约定，这是 <strong>Godot</strong> 的虚函数，也就是你可以覆盖的与引擎通信的内置函数。</p>
+</blockquote>
+<p>我们的 <strong>Sprite2D</strong> 由于 <code>_process()</code> 函数中的代码而移动。<strong>Godot</strong> 提供了一种打开和关闭处理的方法：<a target="_blank" rel="noopener" href="https://docs.godotengine.org/zh-cn/4.x/classes/class_node.html#class-node-method-set-process">Node.set_process()</a> 。<strong>Node</strong> 的另一个方法 <code>is_processing()</code> ，如果空闲处理处于活动状态，则返回 <code>true</code>。我们可以使用 <code>not</code> 关键字来反转该值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func _on_button_pressed():</span><br><span class="line">	set_process(not is_processing())</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>_on_button_pressed()</code>是人为设置的按钮给出的信号，这个函数名在将按钮与对象链接时自动生成。(游戏引擎自动给出函数框架，由程序员对函数内容进行补充。)</p>
+<p>这里是<strong>通过编辑器连接信号</strong>的方法。</p>
+</blockquote>
+<h4 id="定义velocity"><a class="markdownIt-Anchor" href="#定义velocity"></a> 定义velocity</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">var speed = 400</span><br><span class="line">var angular_speed = PI</span><br><span class="line"></span><br><span class="line">func _process(delta):</span><br><span class="line">	rotation += angular_speed * delta</span><br><span class="line">	var velocity = Vector2.UP.rotated(rotation) * speed</span><br><span class="line">	position += velocity * delta</span><br></pre></td></tr></table></figure>
+<p>定义一个名为 <code>velocity</code> 的局部变量，该变量是用于表示方向和速度的 <strong>2D</strong> 向量。要让节点向前移动，我们可以从 <strong>Vector2</strong> 类的常量 <code>Vector2.UP</code> 入手，这个向量指向上方，调用 <code>Vector2</code> 的 <code>rotated()</code> 方法可以将其进行旋转。表达式 <code>Vector2.UP.rotated(rotation)</code> 表示的是指向图标前方的向量。用这个方向与我们的 <code>speed</code> 属性相乘后，得到的就是用来移动节点的速度。</p>
+<blockquote>
+<p><code>rotation</code>、<code>position</code>是<strong>Node2D</strong>类的成员变量。</p>
+<p><strong>PI</strong>是<strong>GDScript</strong>语言的常量。</p>
+</blockquote>
+<p>实现出的效果就是图像在绕圈圈。</p>
+<h4 id="两种处理玩家输入途径"><a class="markdownIt-Anchor" href="#两种处理玩家输入途径"></a> 两种处理玩家输入途径</h4>
+<ol>
+<li>
+<p>内置的输入回调，主要是 <code>_unhandled_input()</code>。和 <code>_process()</code>一样 ，它是一个内置的虚函数，<strong>Godot</strong> 每次在玩家按下一个键时都会调用。它是你想用来对那些不是每一帧都发生的事件做出反应的工具，比如按 <code>Space</code> 来跳跃。</p>
+<p>更多关于输入回调的信息请参阅 <a target="_blank" rel="noopener" href="https://docs.godotengine.org/zh-cn/4.x/tutorials/inputs/inputevent.html#doc-inputevent">使用 InputEvent</a> 。</p>
+</li>
+<li>
+<p><code>Input</code> 单例。单例是一个全局可访问的对象。Godot 在脚本中提供对几个对象的访问。它是每一帧检查输入的有效工具。</p>
+</li>
+</ol>
+<blockquote>
+<p>下面讲解第二种途径<code>Input</code>。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">var speed = 400</span><br><span class="line">var angular_speed = PI</span><br><span class="line"></span><br><span class="line">func _process(delta):</span><br><span class="line">	var direction = 0</span><br><span class="line">	if Input.is_action_pressed(&quot;ui_left&quot;):</span><br><span class="line">		direction = -1</span><br><span class="line">	if Input.is_action_pressed(&quot;ui_right&quot;):</span><br><span class="line">		direction = 1</span><br><span class="line">	rotation += angular_speed * direction * delta</span><br><span class="line">	var velocity = Vector2.ZERO</span><br><span class="line">	if Input.is_action_pressed(&quot;ui_up&quot;):</span><br><span class="line">		velocity = Vector2.UP.rotated(rotation) * speed</span><br><span class="line">	position += velocity * delta</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这段代码实现出来的效果跟游戏“坦克动荡”的移动类似。</p>
+</blockquote>
+<p>为了检查当前帧玩家是否按下了某个键，我们需要调用 <code>Input.is_action_pressed()</code>。这个方法使用一个字符串来表示一个输入动作。当该按键被按下时，函数返回 <code>true</code>，否则这个函数将返回 <code>false</code>。</p>
+<p>上面我们使用的两个动作，“<code>ui_left</code>”和“<code>ui_right</code>”，是每个 <strong>Godot</strong> 项目中预定义的。它们分别在玩家按键盘上的左右箭头或游戏手柄上的左右键时触发。</p>
+<p>我们将 <code>velocity</code> 的值初始化为 <code>Vector2.ZERO</code>，这是内置 <code>Vector</code> 类型的一个常量，代表长度为 <strong>0</strong> 的二维向量。</p>
+<p>如果玩家按下“<code>ui_up</code>”动作，我们就会更新速度的值，使对象向前移动。</p>
+<blockquote>
+<p>打开“项目 -&gt; 项目设置”并点击“输入映射”选项卡，就可以查看并编辑项目中的输入动作。</p>
+</blockquote>
+<h4 id="连接信号的两种方法"><a class="markdownIt-Anchor" href="#连接信号的两种方法"></a> 连接信号的两种方法</h4>
+<p>上文中使用到的<code>_on_button_pressed()</code>是<strong>通过编辑器连接信号</strong>的方法。</p>
+<p>除此之外，还可以<strong>通过代码连接信号</strong>：</p>
+<p>核心思路：获取发出信号的节点的引用，并储存到目标节点中的本地变量。然后通过这个变量的成员信号调用<code>connect</code>方法。</p>
+<blockquote>
+<p>要使用代码来连接信号，你需要调用所需监听节点信号的 <code>connect()</code> 方法。这里我们要监听的是 <strong>Timer</strong> 的“<code>timeout</code>”信号。</p>
+</blockquote>
+<p>我们想要在场景实例化时连接信号，我们可以使用 <a target="_blank" rel="noopener" href="https://docs.godotengine.org/zh-cn/4.x/classes/class_node.html#class-node-private-method-ready">Node._ready()</a> 内置函数来实现这一点，当节点完全实例化时，引擎会自动调用该函数。</p>
+<p>为了获取相对于当前节点的引用，我们使用方法 <a target="_blank" rel="noopener" href="https://docs.godotengine.org/zh-cn/4.x/classes/class_node.html#class-node-method-get-node">Node.get_node()</a>。我们可以将引用存储在变量中。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">func _ready():</span><br><span class="line">	var timer = get_node(&quot;Timer&quot;)</span><br><span class="line">	timer.timeout.connect(_on_timer_timeout)</span><br></pre></td></tr></table></figure>
+<p>该行读起来是这样的：我们将计时器的“<code>timeout</code>”信号连接到脚本附加到的节点上。当计时器发出<code>timeout</code>时，去调用我们需要定义的函数<code>_on_timer_timeout()</code>。让我们将其定义添加到脚本的底部，并使用它来切换对象的可见性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">func _on_timer_timeout():</span><br><span class="line">	visible = not visible</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>visible</code> 属性是一个布尔值，用于控制节点的可见性。</p>
+</blockquote>
+<p>如果你现在运行 <strong>Node2D</strong> 场景，就会看到对象在闪啊闪的，间隔为一秒。(因为默认计时为一秒，并启用了<strong>Autostart</strong>功能。)</p>
+<h4 id="自定义信号"><a class="markdownIt-Anchor" href="#自定义信号"></a> 自定义信号</h4>
+<p>你可以在脚本中定义自定义信号。例如，假设你希望在玩家的生命值为零时通过屏幕显示游戏结束。为此，当他们的生命值达到 <strong>0</strong> 时，你可以定义一个名为“<code>died</code>”或“<code>health_depleted</code>”的信号。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">extends Node2D</span><br><span class="line">signal health_depleted</span><br><span class="line">var health = 10</span><br></pre></td></tr></table></figure>
+<p>自定义信号的工作方式与内置信号相同：它们显示在“<strong>节点</strong>”选项卡中(在表示脚本的<code>.gd</code>的特殊栏目下)，你可以像连接其他信号一样连接到它们。</p>
+<p>要通过代码发出信号，请调用信号的 <code>emit()</code> 方法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func take_damage(amount):</span><br><span class="line">	health -= amount</span><br><span class="line">	if health &lt;= 0:</span><br><span class="line">		health_depleted.emit()</span><br></pre></td></tr></table></figure>
+<p>信号还可以选择声明一个或多个参数。在括号之间指定参数的名称：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">signal health_changed(old_value, new_value)</span><br></pre></td></tr></table></figure>
+<p>要在发出信号的同时传值，请将它们添加为 <code>emit()</code> 函数的额外参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">func take_damage(amount):</span><br><span class="line">	var old_health = health</span><br><span class="line">	health -= amount</span><br><span class="line">	health_changed.emit(old_health, health)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://luvreadunion.com/2024/08/13/Godot%E5%BC%80%E5%8F%91%E6%97%A5%E8%AE%B0/" data-id="cmbxk3yfz000dhg9q1mpp4vxd" data-title="Godot开发日记" class="article-share-link">分享</a>
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Godot/" rel="tag">Godot</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AD%A6%E4%B9%A0/" rel="tag">学习</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" class="wow fadeInUp">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          <img data-src="/images/86446038.avif" data-sizes="auto" alt="OS填空题真题题解" class="lazyload">
+        
+        <a href="/2024/09/09/OS%E5%A1%AB%E7%A9%BA%E9%A2%98%E7%9C%9F%E9%A2%98%E9%A2%98%E8%A7%A3/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            OS填空题真题题解
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/images/35632328.avif" data-sizes="auto" alt="Hexo笔记" class="lazyload">
+      
+      <a href="/2024/04/18/Hexo%E7%AC%94%E8%AE%B0/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          Hexo笔记
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrap wow fadeInRight wrap-sticky">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E7%99%BD"><span class="toc-number">1.</span> <span class="toc-text"> 开场白</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#godot"><span class="toc-number">2.</span> <span class="toc-text"> Godot</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#godot-%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5"><span class="toc-number">2.0.1.</span> <span class="toc-text"> Godot 关键概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF"><span class="toc-number">2.0.1.1.</span> <span class="toc-text"> 场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9"><span class="toc-number">2.0.1.2.</span> <span class="toc-text"> 节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E6%A0%91"><span class="toc-number">2.0.1.3.</span> <span class="toc-text"> 场景树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.0.1.4.</span> <span class="toc-text"> 信号</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-number">2.0.2.</span> <span class="toc-text"> 快捷键</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gdscript"><span class="toc-number">2.1.</span> <span class="toc-text"> GDScript</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">2.1.1.1.</span> <span class="toc-text"> 函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%98%E9%87%8F"><span class="toc-number">2.1.1.2.</span> <span class="toc-text"> 变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gameloop-%E7%89%B9%E6%AE%8A%E5%87%BD%E6%95%B0-_processdelta"><span class="toc-number">2.1.1.3.</span> <span class="toc-text"> GameLoop 特殊函数 _process(delta)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#if%E8%AF%AD%E5%8F%A5%E5%92%8Cwhile%E8%AF%AD%E5%8F%A5"><span class="toc-number">2.1.1.4.</span> <span class="toc-text"> if语句和while语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2d-vectors"><span class="toc-number">2.1.1.5.</span> <span class="toc-text"> 2D Vectors</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#array"><span class="toc-number">2.1.1.6.</span> <span class="toc-text"> array</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dictionary"><span class="toc-number">2.1.1.7.</span> <span class="toc-text"> dictionary</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.1.8.</span> <span class="toc-text"> 数据类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E9%80%89%E7%9A%84%E6%98%BE%E5%BC%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.1.9.</span> <span class="toc-text"> 可选的显式数据类型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E7%9F%A5%E8%AF%86"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 实战知识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#extends"><span class="toc-number">2.1.2.1.</span> <span class="toc-text"> extends</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#_init"><span class="toc-number">2.1.2.2.</span> <span class="toc-text"> _init()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#_processdelta"><span class="toc-number">2.1.2.3.</span> <span class="toc-text"> _process(delta)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89velocity"><span class="toc-number">2.1.2.4.</span> <span class="toc-text"> 定义velocity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%A4%E7%A7%8D%E5%A4%84%E7%90%86%E7%8E%A9%E5%AE%B6%E8%BE%93%E5%85%A5%E9%80%94%E5%BE%84"><span class="toc-number">2.1.2.5.</span> <span class="toc-text"> 两种处理玩家输入途径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E4%BF%A1%E5%8F%B7%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.2.6.</span> <span class="toc-text"> 连接信号的两种方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.1.2.7.</span> <span class="toc-text"> 自定义信号</span></a></li></ol></li></ol></li></ol></li></ol></div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+    
+      <div class="sidebar-btn-wrapper" style="position:static">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+    
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer" class="wow fadeInUp">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      <div>
+        <span class="icon-copyright"></span>
+        2020-2025
+        <span class="footer-info-sep"></span>
+        Luv
+      </div>
+      
+        <div>
+          基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+          Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+        </div>
+      
+      
+        <div>
+          <span class="icon-brush"></span>
+          106.3k
+          &nbsp;|&nbsp;
+          <span class="icon-coffee"></span>
+          06:41
+        </div>
+      
+      
+        <div>
+          <span class="icon-eye"></span>
+          <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+          &nbsp;|&nbsp;
+          <span class="icon-user"></span>
+          <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+        </div>
+      
+    </div>
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E7%99%BD"><span class="toc-number">1.</span> <span class="toc-text"> 开场白</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#godot"><span class="toc-number">2.</span> <span class="toc-text"> Godot</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#godot-%E5%85%B3%E9%94%AE%E6%A6%82%E5%BF%B5"><span class="toc-number">2.0.1.</span> <span class="toc-text"> Godot 关键概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF"><span class="toc-number">2.0.1.1.</span> <span class="toc-text"> 场景</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%8A%82%E7%82%B9"><span class="toc-number">2.0.1.2.</span> <span class="toc-text"> 节点</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9C%BA%E6%99%AF%E6%A0%91"><span class="toc-number">2.0.1.3.</span> <span class="toc-text"> 场景树</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.0.1.4.</span> <span class="toc-text"> 信号</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-number">2.0.2.</span> <span class="toc-text"> 快捷键</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gdscript"><span class="toc-number">2.1.</span> <span class="toc-text"> GDScript</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-number">2.1.1.1.</span> <span class="toc-text"> 函数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%98%E9%87%8F"><span class="toc-number">2.1.1.2.</span> <span class="toc-text"> 变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#gameloop-%E7%89%B9%E6%AE%8A%E5%87%BD%E6%95%B0-_processdelta"><span class="toc-number">2.1.1.3.</span> <span class="toc-text"> GameLoop 特殊函数 _process(delta)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#if%E8%AF%AD%E5%8F%A5%E5%92%8Cwhile%E8%AF%AD%E5%8F%A5"><span class="toc-number">2.1.1.4.</span> <span class="toc-text"> if语句和while语句</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2d-vectors"><span class="toc-number">2.1.1.5.</span> <span class="toc-text"> 2D Vectors</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#array"><span class="toc-number">2.1.1.6.</span> <span class="toc-text"> array</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#dictionary"><span class="toc-number">2.1.1.7.</span> <span class="toc-text"> dictionary</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.1.8.</span> <span class="toc-text"> 数据类型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E9%80%89%E7%9A%84%E6%98%BE%E5%BC%8F%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.1.1.9.</span> <span class="toc-text"> 可选的显式数据类型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E6%88%98%E7%9F%A5%E8%AF%86"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 实战知识</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#extends"><span class="toc-number">2.1.2.1.</span> <span class="toc-text"> extends</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#_init"><span class="toc-number">2.1.2.2.</span> <span class="toc-text"> _init()</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#_processdelta"><span class="toc-number">2.1.2.3.</span> <span class="toc-text"> _process(delta)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89velocity"><span class="toc-number">2.1.2.4.</span> <span class="toc-text"> 定义velocity</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%A4%E7%A7%8D%E5%A4%84%E7%90%86%E7%8E%A9%E5%AE%B6%E8%BE%93%E5%85%A5%E9%80%94%E5%BE%84"><span class="toc-number">2.1.2.5.</span> <span class="toc-text"> 两种处理玩家输入途径</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5%E4%BF%A1%E5%8F%B7%E7%9A%84%E4%B8%A4%E7%A7%8D%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.2.6.</span> <span class="toc-text"> 连接信号的两种方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BF%A1%E5%8F%B7"><span class="toc-number">2.1.2.7.</span> <span class="toc-text"> 自定义信号</span></a></li></ol></li></ol></li></ol></li></ol></div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    <div class="site-search">
+      <div class="reimu-popup popup">
+        <div class="reimu-search">
+          <span class="reimu-search-input-icon"></span>
+          <div class="reimu-search-input" id="reimu-search-input"></div>
+        </div>
+        <div class="reimu-results">
+          <div id="reimu-stats"></div>
+          <div id="reimu-hits"></div>
+          <div id="reimu-pagination" class="reimu-pagination"></div>
+        </div>
+        <span class="popup-btn-close"></span>
+      </div>
+    </div>
+    
+<script src="https://npm.webcache.cn/jquery@3.7.1/dist/jquery.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <script>
+    if (window.mermaid) {
+      // https://github.com/mermaid-js/mermaid/issues/1945
+      const elementCode = '.mermaid'
+      const saveOriginalData = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if (element.getAttribute('data-original-code') == null){
+                element.setAttribute('data-original-code', element.innerHTML)
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      }
+      const resetProcessed = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if(element.getAttribute('data-original-code') != null){
+                element.removeAttribute('data-processed')
+                element.innerHTML = element.getAttribute('data-original-code')
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      } 
+      const loadMermaid = (theme) => {
+        window.mermaid.initialize({theme})
+        window.mermaid.init({theme}, document.querySelectorAll(elementCode))
+      }
+      document.body.addEventListener('dark-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('dark'))
+        .catch(console.error)
+      })
+      document.body.addEventListener('light-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('default'))
+        .catch(console.error)
+      })
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/algoliasearch@4.17.1/dist/algoliasearch-lite.umd.js"></script>
+
+  
+<script src="https://npm.webcache.cn/instantsearch.js@4.56.1/dist/instantsearch.production.min.js"></script>
+
+  
+<script src="/js/algolia_search.js"></script>
+
+  <script>
+    var CONFIG = {
+      root: '/',
+      algolia: {
+        applicationID: "37ZQYZE607",
+        apiKey: "dfdbcdcf987c68afcf35a63def2936e2",
+        indexName: "Luv",
+        hits: {
+          "per_page": parseInt("10")
+        },
+        labels: {
+          "input_placeholder": "搜索.....",
+          "hits_empty": "未发现与 「${query}」相关内容",
+          "hits_stats": "找到${hits}条结果（用时 ${time} ms）"
+        }
+      }
+    };
+  </script>
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    firework(JSON.parse('{"excludeElements":["a"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+  <!-- hexo injector body_end start -->
+<script src="/js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+

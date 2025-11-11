@@ -1,0 +1,787 @@
+
+  <!DOCTYPE html>
+  <html lang="zh-CN"  >
+  <head>
+  <meta charset="utf-8">
+  
+
+  
+
+  
+
+  
+  <title>
+    LAKE论文解读 |
+    
+    Luv Read Union
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="preload" href="https://fonts.googleapis.com/css?family=Mulish:400,400italic,700,700italic%7CNoto%20Serif%20SC:400,400italic,700,700italic%7CUbuntu%20Mono:400,400italic,700,700italic&display=swap&subset=latin,latin-ext" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/regular.min.css">
+<link rel="stylesheet" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/solid.min.css">
+
+  <link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/brands.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v5-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;"><link rel="preload" href="https://npm.webcache.cn/@fortawesome/fontawesome-free@6.5.1/css/v4-font-face.min.css" as="style" onload="this.onload&#x3D;null;this.rel&#x3D;&#39;stylesheet&#39;">
+  
+<link rel="stylesheet" href="/css/loader.css">
+
+  <meta name="description" content="开场白 来阅读一下《Towards a Machine Learning-Assisted Kernel with LAKE》原论文。 o((&gt;ω&lt; ))o  论文链接：https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;abs&#x2F;10.1145&#x2F;3575693.3575697   LAKE Learning-assisted, Accelerated KErnel 5个启发式内核子系统可以">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LAKE论文解读">
+<meta property="og:url" content="https://luvreadunion.com/2025/10/06/LAKE%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/index.html">
+<meta property="og:site_name" content="Luv Read Union">
+<meta property="og:description" content="开场白 来阅读一下《Towards a Machine Learning-Assisted Kernel with LAKE》原论文。 o((&gt;ω&lt; ))o  论文链接：https:&#x2F;&#x2F;dl.acm.org&#x2F;doi&#x2F;abs&#x2F;10.1145&#x2F;3575693.3575697   LAKE Learning-assisted, Accelerated KErnel 5个启发式内核子系统可以">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-06T09:57:40.000Z">
+<meta property="article:modified_time" content="2025-10-06T10:00:00.535Z">
+<meta property="article:author" content="Luv">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="论文">
+<meta property="article:tag" content="系统">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Luv Read Union" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/images/favicon.ico">
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/typeface-source-code-pro@1.1.13/index.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css">
+
+  
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/katex@0.16.9/dist/katex.min.css">
+
+  
+  
+  
+  
+<script src="https://npm.webcache.cn/pace-js@1.2.4/pace.min.js"></script>
+
+  
+    
+<link rel="stylesheet" href="https://npm.webcache.cn/wowjs@1.1.3/css/libs/animate.css">
+
+    
+<script src="https://npm.webcache.cn/wowjs@1.1.3/dist/wow.min.js"></script>
+
+    <script>
+      new WOW({
+        offset: 0,
+        mobile: true,
+        live: false
+      }).init();
+    </script>
+  
+  
+    <script src="/sw.js"></script>
+  
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+  <body>
+    
+  <div id='loader'>
+    <div class="loading-left-bg"></div>
+    <div class="loading-right-bg"></div>
+    <div class="spinner-box">
+      <div class="loading-taichi">
+        <svg width="150" height="150" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision">
+          <path d="M303.5 432A80 80 0 0 1 291.5 592A80 80 0 0 1 303.5 432z" fill="#ff6e6b" />
+          <path d="M512 65A447 447 0 0 1 512 959L512 929A417 417 0 0 0 512 95A417 417 0 0 0 512 929L512 959A447 447 0 0 1 512 65z" fill="#fd0d00" />
+          <path d="M512 95A417 417 0 0 1 929 512A208.5 208.5 0 0 1 720.5 720.5L720.5 592A80 80 0 0 0 720.5 432A80 80 0 0 0 720.5 592L720.5 720.5A208.5 208.5 0 0 1 512 512A208.5 208.5 0 0 0 303.5 303.5A208.5 208.5 0 0 0 95 512A417 417 0 0 1 512 95" fill="#fd0d00" />
+        </svg>
+      </div>
+      <div class="loading-word">少女祈祷中...</div>
+    </div>
+  </div>
+  </div>
+  <script>
+    var time = null;
+    const startLoading = () => {
+      time = Date.now();
+      document.getElementById('loader').classList.remove("loading");
+    }
+    const endLoading = () => {
+      if (!time) {
+        document.body.style.overflow = 'auto';
+        document.getElementById('loader').classList.add("loading");
+      } else {
+        if (Date.now() - time > 500) {
+          time = null;
+          document.body.style.overflow = 'auto';
+          document.getElementById('loader').classList.add("loading");
+        } else {
+          setTimeout(endLoading, 500 - (Date.now() - time));
+          time = null;
+        }
+      }
+    }
+    window.addEventListener('load', endLoading);
+    document.getElementById('loader').addEventListener('click', endLoading);
+  </script>
+
+
+    <div id="container">
+      <div id="wrap">
+        <div id="header-nav">
+  <nav id="main-nav">
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/">首页</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/archives">归档</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/about">关于</a>
+      </span>
+    
+      <span class="main-nav-link-wrap">
+        <span class="main-nav-icon"></span>
+        <a class="main-nav-link" href="/friend">友链</a>
+      </span>
+    
+    <a id="main-nav-toggle" class="nav-icon"></a>
+  </nav>
+  <nav id="sub-nav">
+    
+      <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS 订阅"></a>
+    
+    
+      <a id="nav-search-btn" class="nav-icon popup-trigger" title="搜索"></a>
+    
+    
+  </nav>
+</div>
+<header id="header">
+  
+    <img fetchpriority="high" src="/images/36861160.avif" alt="LAKE论文解读">
+  
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <div id="logo-wrap">
+        
+          
+          
+            <a href="/" id="logo">
+              <h1>LAKE论文解读</h1>
+            </a>
+          
+        
+      </div>
+      
+        
+        <h2 id="subtitle-wrap">
+          
+        </h2>
+      
+    </div>
+  </div>
+</header>
+
+        <div id="content" class="outer">
+          
+          <section id="main"><article id="post-LAKE论文解读" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-inner">
+    <div class="article-meta">
+      <div class="article-date wow slideInLeft">
+  <a href="/2025/10/06/LAKE%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" class="article-date-link">
+    <time datetime="2025-10-06T09:57:40.000Z" itemprop="datePublished">2025-10-06</time>
+  </a>
+</div>
+
+      
+  <div class="article-category wow slideInLeft">
+    <a class="article-category-link" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><a class="article-category-link" href="/categories/%E7%B3%BB%E7%BB%9F/">系统</a>
+  </div>
+
+
+    </div>
+    <div class="hr-line"></div>
+    
+
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="开场白"><a class="markdownIt-Anchor" href="#开场白"></a> 开场白</h1>
+<p>来阅读一下《<strong>Towards a Machine Learning-Assisted Kernel with LAKE</strong>》原论文。</p>
+<p>o((&gt;ω&lt; ))o</p>
+<blockquote>
+<p>论文链接：<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/abs/10.1145/3575693.3575697">https://dl.acm.org/doi/abs/10.1145/3575693.3575697</a></p>
+</blockquote>
+<h1 id="lake"><a class="markdownIt-Anchor" href="#lake"></a> LAKE</h1>
+<p><strong>L</strong>earning-assisted, <strong>A</strong>ccelerated <strong>KE</strong>rnel</p>
+<p><strong>5</strong>个启发式内核子系统可以被<strong>ML</strong>加速：(最后一行是文件系统加密(EFS))</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">应用</th>
+<th style="text-align:center">ML算法</th>
+<th style="text-align:center">API</th>
+<th style="text-align:center">推理频次</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">存储系统里I/O延迟的预测</td>
+<td style="text-align:center">神经网络</td>
+<td style="text-align:center">CUDA</td>
+<td style="text-align:center">细粒度</td>
+</tr>
+<tr>
+<td style="text-align:center">预测缓存中的页热度以替换</td>
+<td style="text-align:center">LSTM</td>
+<td style="text-align:center">High level</td>
+<td style="text-align:center">粗粒度</td>
+</tr>
+<tr>
+<td style="text-align:center">预测CPU之间工作窃取的收益</td>
+<td style="text-align:center">神经网络</td>
+<td style="text-align:center">CUDA</td>
+<td style="text-align:center">细粒度</td>
+</tr>
+<tr>
+<td style="text-align:center">预测下一个I/O访问以预读</td>
+<td style="text-align:center">神经网络</td>
+<td style="text-align:center">CUDA</td>
+<td style="text-align:center">粗粒度</td>
+</tr>
+<tr>
+<td style="text-align:center">监测恶意软件和攻击</td>
+<td style="text-align:center">k-NN</td>
+<td style="text-align:center">CUDA</td>
+<td style="text-align:center">粗粒度</td>
+</tr>
+<tr>
+<td style="text-align:center">文件系统中从storage中放入/取出过程中的加密/解密</td>
+<td style="text-align:center">-</td>
+<td style="text-align:center">CUDA</td>
+<td style="text-align:center">细粒度</td>
+</tr>
+</tbody>
+</table>
+<p>遇到的难点：</p>
+<ol>
+<li>使用<strong>GPU</strong>/<strong>TPU</strong>会压制<strong>ML</strong>算法对性能的作用；</li>
+<li>数据传输带来的摊销；</li>
+<li>抽象层边界和跨层数据共享的紧张关系。</li>
+</ol>
+<p>对应的解决策略：</p>
+<ol>
+<li>使用硬件厂商提供的<strong>API</strong>，去除内核态和用户态之间的数据拷贝开销；</li>
+<li>提供自定义用户接口以控制竞争，在竞争或其他性能故障发生时得以预测并回调基于<strong>CPU</strong>的处理方法；</li>
+<li>基于<strong>API</strong>，在内核里记录子系统有关训练和推理的数据，以预测困难(比如异步问题和抽象层边界问题)。</li>
+</ol>
+<p>论文贡献：</p>
+<ul>
+<li>一套使得针对<strong>ML</strong>硬件加速子能在内核中使用，提供界面解决在内核和用户共享加速子情况下、竞争和可变的性能收益率问题。</li>
+<li>在不同内核子系统下，简化特征收集和特征处理的高性能的<strong>API</strong>。</li>
+<li>对<strong>CPU</strong>利用率降低和内核子系统性能提高的评估</li>
+</ul>
+<p>加速子的栈并不在内核空间里可见，通常还依赖于<strong>kernel-bypass</strong>设计，这种设计将专有的高级API支持纳入用户空间。现有的加速子虚拟化技术并不充分，而且内核和用户空间的数据传输也低效率、不可行。</p>
+<p>最关键的挑战在于：</p>
+<ul>
+<li>处理内核和用户之间对加速子之间的竞争</li>
+<li>减少不必要的内核/用户边界上的数据移动</li>
+<li>让内核子系统能够调整CPU和加速子，依据性能和准确的收益率</li>
+</ul>
+<h2 id="设计"><a class="markdownIt-Anchor" href="#设计"></a> 设计</h2>
+<p>三个重要组件：</p>
+<ul>
+<li>内核侧<strong>API</strong>提供者 <em>lakeLib</em></li>
+<li>内核-用户通信通道 <em>lakeShm</em></li>
+<li>用以实现<strong>API</strong>的用户侧守护进程 <em>lakeD</em></li>
+</ul>
+<p><em>lakeLib</em>是一个kernel module，将加速子厂商提供在用户空间的<strong>API</strong>暴露到内核空间。暴露前后的<strong>API</strong>采用同一个名字。内核里的每个<strong>API</strong>做三件事：</p>
+<ul>
+<li>序列化API标识符和参数进入到一个指令</li>
+<li>发送指令通过通信信道到用户空间执行</li>
+<li>等待回复</li>
+</ul>
+<p><em>lakeD</em>在用户侧监听上述指令，反序列化并执行需要的<strong>API</strong>。</p>
+<p><em>lakeShm</em>是一个kernel module，提供内存分配的<strong>API</strong>，方便内核-用户通信。它通过请求内存并把内存映射到内核空间的方式工作。</p>
+<p>将内核中使用<strong>LAKE</strong>的操作分为以下三类：</p>
+<ul>
+<li>local operations: 内核已有的功能，不被LAKE改变，比如内存分配<em>vmalloc</em></li>
+<li>API-remoted operations</li>
+<li>copiable memory allocations</li>
+</ul>
+<p>CUDA提供用户空间到GPU的零拷贝发送的API，但LAKE做不到因为CUDA的library是闭源的。所以使用lakeShm本身不会在内核空间和加速子之间产生零拷贝数据传输。数据拷贝的开销需要使用LAKE提供的更高层次的API来消除。</p>
+<p>存在一个batch size，CPU和GPU的处理效率相当(CPU适合小batch，GPU适合大batch)，于是LAKE支持在运行中这两者使用上的切换。(这样依据实时效率的切换成为了一个机制policy)</p>
+<p>上面这个机制同样也解决了竞争问题，当GPU被占用时也将计算撤回CPU中。</p>
+<p>像Tensorflow这些现有的ML库将复杂的机器学习功能做成了更高层次的API，直接妨碍到了使用CUDA的runtime API。同时又很难去实现CUDA算法或者Tensorflow这些库的优化，于是必须要找到机制去让LAKE可以使用这些高层次的库。</p>
+<p>LAKE的API很通用以支持手动添加API。</p>
+<h2 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h2>
+<p>LAKE支持内核的<strong>登记</strong> registry</p>
+<p>Feature vectors存储在内存中，格式为&lt;numfeatures, kvpair*, ts_begin, ts_end&gt;</p>
+<p>kvpair* 是一个map，保存key-value键值对</p>
+<p>每个registry有一个<strong>schema</strong>纲要，实现上是一个map，key为特征名字，键值为元组&lt;size, entries&gt;，size是特征类型的字节大小，entries提供一个数组数量，该数组记录该特征的历史值。</p>
+<p>LAKE不跟踪真实的特征的向量项，而是把values当作无类型的字节处理。对于多数的特征类型(比如int)，entries为1，表示该向量就是个标量。当entries大于1时，就是数组的长度，此时下标越小表示越新。</p>
+<p>精准控制batch size是使用加速子的关键参数。通过传递参数 时间戳<em>ts</em> 返回部分特征信息。</p>
+<h3 id="实现细节"><a class="markdownIt-Anchor" href="#实现细节"></a> 实现细节</h3>
+<p>通信通道采用<strong>Netlink sockets</strong>实现。</p>
+<p><em>lakeShm</em>保留了<strong>DMA</strong>区域，内存分配采用最佳匹配。使用内存映射避免kernel-userspace之间巨大的数据缓存和传输。</p>
+<p><em>lakeD</em>通过维持独立的地址空间、沙箱空间、Seccomp(<strong>安全计算（Secure Computing）模式</strong>)来保证安全性。</p>
+<h2 id="测试"><a class="markdownIt-Anchor" href="#测试"></a> 测试</h2>
+<p>结合各个内核子系统进行性能评估。</p>
+<h3 id="存储系统里io延迟的预测"><a class="markdownIt-Anchor" href="#存储系统里io延迟的预测"></a> 存储系统里I/O延迟的预测</h3>
+<p>可预测的延迟对于服务于交互式应用程序(如消息传递和搜索)的数据中心系统非常有用，如果系统预测某个I/O将变慢，那么可以通过向另一个存储节点发出重复的I/O请求来减轻延迟损失。</p>
+<p><strong>LinnOS</strong>展示了OS如何通过神经网络学习并推理每次I/O的延迟。它使用一个基于系统的阈值，将延迟分类为慢和快。</p>
+<p>在LAKE的框架下尝试增加了LinnOS的层数。</p>
+<p>基本上只有在神经网络层数多的情况下LAKE才有明显的延迟降低。</p>
+<h2 id="相关"><a class="markdownIt-Anchor" href="#相关"></a> 相关</h2>
+<p><strong>mmap</strong>是Linux的内存映射函数，将一个文件或者其它对象映射进内存。文件被映射到多个页上，如果文件的大小不是所有页的大小之和，最后一个页不被使用的空间将会清零。</p>
+<p>也是一种零拷贝技术，用户空间的 mmap file 使用虚拟内存，实际上并不占据物理内存，只有在内核空间的 kernel buffer cache 才占据实际的物理内存。</p>
+<blockquote>
+<p>mmap 仅仅能够避免内核空间到用户空间的全程 CPU 负责的数据拷贝，但是内核空间内部还是需要全程 CPU 负责的数据拷贝；</p>
+</blockquote>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/507907660">https://zhuanlan.zhihu.com/p/507907660</a></p>
+</blockquote>
+<p><strong>IOPS</strong>（Input/Output Operations Per Second）是一个用于电脑存储设备（如硬盘（HDD）、固态硬盘（SSD）或存储区域网络（SAN））性能测试的量测方式</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://luvreadunion.com/2025/10/06/LAKE%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" data-id="cmgeyixmv0000ho9q7cu322am" data-title="LAKE论文解读" class="article-share-link">分享</a>
+      
+      
+      
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%B3%BB%E7%BB%9F/" rel="tag">系统</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+
+
+    </footer>
+  </div>
+  
+    
+  <nav id="article-nav" class="wow fadeInUp">
+    
+      <div class="article-nav-link-wrap article-nav-link-left">
+        
+          <img data-src="/images/42826738.jpg" data-sizes="auto" alt="Minder论文解读" class="lazyload">
+        
+        <a href="/2025/10/06/Minder%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/"></a>
+        <div class="article-nav-caption">前一篇</div>
+        <h3 class="article-nav-title">
+          
+            Minder论文解读
+          
+        </h3>
+      </div>
+    
+    
+    <div class="article-nav-link-wrap article-nav-link-right">
+      
+        <img data-src="/images/76200564.jpg" data-sizes="auto" alt="MixMatch与FixMatch论文解读" class="lazyload">
+      
+      <a href="/2025/06/15/MixMatch%E4%B8%8EFixMatch%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/"></a>
+      <div class="article-nav-caption">后一篇</div>
+      <h3 class="article-nav-title">
+        
+          MixMatch与FixMatch论文解读
+        
+      </h3>
+    </div>
+    
+  </nav>
+
+
+  
+</article>
+
+
+
+
+
+
+</section>
+          
+            <aside id="sidebar">
+  <div class="sidebar-wrap wow fadeInRight wrap-sticky">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E7%99%BD"><span class="toc-number">1.</span> <span class="toc-text"> 开场白</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lake"><span class="toc-number">2.</span> <span class="toc-text"> LAKE</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.</span> <span class="toc-text"> 设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text"> 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 实现细节</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">2.3.</span> <span class="toc-text"> 测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F%E9%87%8Cio%E5%BB%B6%E8%BF%9F%E7%9A%84%E9%A2%84%E6%B5%8B"><span class="toc-number">2.3.1.</span> <span class="toc-text"> 存储系统里I&#x2F;O延迟的预测</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3"><span class="toc-number">2.4.</span> <span class="toc-text"> 相关</span></a></li></ol></li></ol></div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+    
+      <div class="sidebar-btn-wrapper" style="position:static">
+        <div class="sidebar-toc-btn current"></div>
+        <div class="sidebar-common-btn"></div>
+      </div>
+    
+  </div>
+
+  
+</aside>
+
+          
+        </div>
+        <footer id="footer" class="wow fadeInUp">
+  <div style="width: 100%; overflow: hidden">
+    <div class="footer-line"></div>
+  </div>
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      <div>
+        <span class="icon-copyright"></span>
+        2020-2025
+        <span class="footer-info-sep"></span>
+        Luv
+      </div>
+      
+        <div>
+          基于&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>&nbsp;
+          Theme.<a href="https://github.com/D-Sketon/hexo-theme-reimu" target="_blank">Reimu</a>
+        </div>
+      
+      
+        <div>
+          <span class="icon-brush"></span>
+          106.3k
+          &nbsp;|&nbsp;
+          <span class="icon-coffee"></span>
+          06:41
+        </div>
+      
+      
+        <div>
+          <span class="icon-eye"></span>
+          <span id="busuanzi_container_site_pv">总访问量&nbsp;<span id="busuanzi_value_site_pv"></span></span>
+          &nbsp;|&nbsp;
+          <span class="icon-user"></span>
+          <span id="busuanzi_container_site_uv">总访客量&nbsp;<span id="busuanzi_value_site_uv"></span></span>
+        </div>
+      
+    </div>
+  </div>
+</footer>
+
+        <div class="sidebar-top">
+          <img src="/images/taichi.png" height="50" width="50" />
+          <div class="arrow-up"></div>
+        </div>
+        <div id="mask"></div>
+      </div>
+      <nav id="mobile-nav">
+  <div class="sidebar-wrap">
+    
+      <div class="sidebar-toc-sidebar"><div class="sidebar-toc">
+  <h3 class="toc-title">文章目录</h3>
+  <div class="sidebar-toc-wrapper"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E5%9C%BA%E7%99%BD"><span class="toc-number">1.</span> <span class="toc-text"> 开场白</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#lake"><span class="toc-number">2.</span> <span class="toc-text"> LAKE</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1"><span class="toc-number">2.1.</span> <span class="toc-text"> 设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text"> 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E7%BB%86%E8%8A%82"><span class="toc-number">2.2.1.</span> <span class="toc-text"> 实现细节</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95"><span class="toc-number">2.3.</span> <span class="toc-text"> 测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F%E9%87%8Cio%E5%BB%B6%E8%BF%9F%E7%9A%84%E9%A2%84%E6%B5%8B"><span class="toc-number">2.3.1.</span> <span class="toc-text"> 存储系统里I&#x2F;O延迟的预测</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3"><span class="toc-number">2.4.</span> <span class="toc-text"> 相关</span></a></li></ol></li></ol></div>
+</div>
+</div>
+      <div class="sidebar-common-sidebar hidden"><div class="sidebar-author">
+  <img data-src="/avatar/lian.gif" data-sizes="auto" alt="Luv" class="lazyload">
+  <div class="sidebar-author-name">Luv</div>
+  <div class="sidebar-description"></div>
+</div>
+<div class="sidebar-state">
+  <div class="sidebar-state-article">
+    <div>文章</div>
+    <div class="sidebar-state-number">15</div>
+  </div>
+  <div class="sidebar-state-category">
+    <div>分类</div>
+    <div class="sidebar-state-number">10</div>
+  </div>
+  <div class="sidebar-state-tag">
+    <div>标签</div>
+    <div class="sidebar-state-number">20</div>
+  </div>
+</div>
+<div class="sidebar-social">
+  
+</div>
+<div class="sidebar-menu">
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/" aria-label="首页"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">首页</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/archives" aria-label="归档"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">归档</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/about" aria-label="关于"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">关于</div>
+    </div>
+  
+    <div class="sidebar-menu-link-wrap">
+      <a class="sidebar-menu-link-dummy" href="/friend" aria-label="友链"></a>
+      <span class="sidebar-menu-icon"></span>
+      <div class="sidebar-menu-link">友链</div>
+    </div>
+  
+</div>
+</div>
+    
+  </div>
+  
+    <div class="sidebar-btn-wrapper">
+      <div class="sidebar-toc-btn current"></div>
+      <div class="sidebar-common-btn"></div>
+    </div>
+  
+</nav>
+
+    </div>
+    <div class="site-search">
+      <div class="reimu-popup popup">
+        <div class="reimu-search">
+          <span class="reimu-search-input-icon"></span>
+          <div class="reimu-search-input" id="reimu-search-input"></div>
+        </div>
+        <div class="reimu-results">
+          <div id="reimu-stats"></div>
+          <div id="reimu-hits"></div>
+          <div id="reimu-pagination" class="reimu-pagination"></div>
+        </div>
+        <span class="popup-btn-close"></span>
+      </div>
+    </div>
+    
+<script src="https://npm.webcache.cn/jquery@3.7.1/dist/jquery.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/lazysizes@5.3.2/lazysizes.min.js"></script>
+
+
+<script src="https://npm.webcache.cn/clipboard@2.0.11/dist/clipboard.min.js"></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" defer></script>
+
+
+
+  
+<script src="https://npm.webcache.cn/busuanzi@2.3.0/bsz.pure.mini.js" async></script>
+
+
+
+
+  
+<script src="https://npm.webcache.cn/mermaid@9.4.3/dist/mermaid.min.js"></script>
+
+  <script>
+    if (window.mermaid) {
+      // https://github.com/mermaid-js/mermaid/issues/1945
+      const elementCode = '.mermaid'
+      const saveOriginalData = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if (element.getAttribute('data-original-code') == null){
+                element.setAttribute('data-original-code', element.innerHTML)
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      }
+      const resetProcessed = () => {
+        return new Promise((resolve, reject) => {
+          try {
+            var els = document.querySelectorAll(elementCode),
+                count = els.length;
+            els.forEach(element => {
+              if(element.getAttribute('data-original-code') != null){
+                element.removeAttribute('data-processed')
+                element.innerHTML = element.getAttribute('data-original-code')
+              }
+              count--
+              if(count == 0){
+                resolve()
+              }
+            });
+          } catch (error) {
+          reject(error) 
+          }
+        })
+      } 
+      const loadMermaid = (theme) => {
+        window.mermaid.initialize({theme})
+        window.mermaid.init({theme}, document.querySelectorAll(elementCode))
+      }
+      document.body.addEventListener('dark-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('dark'))
+        .catch(console.error)
+      })
+      document.body.addEventListener('light-theme-set', () => {
+        saveOriginalData()
+        .then(resetProcessed())
+        .then(loadMermaid('default'))
+        .catch(console.error)
+      })
+    }
+  </script>
+
+
+
+<script src="/js/pjax_script.js" data-pjax></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<script src="https://npm.webcache.cn/algoliasearch@4.17.1/dist/algoliasearch-lite.umd.js"></script>
+
+  
+<script src="https://npm.webcache.cn/instantsearch.js@4.56.1/dist/instantsearch.production.min.js"></script>
+
+  
+<script src="/js/algolia_search.js"></script>
+
+  <script>
+    var CONFIG = {
+      root: '/',
+      algolia: {
+        applicationID: "37ZQYZE607",
+        apiKey: "dfdbcdcf987c68afcf35a63def2936e2",
+        indexName: "Luv",
+        hits: {
+          "per_page": parseInt("10")
+        },
+        labels: {
+          "input_placeholder": "搜索.....",
+          "hits_empty": "未发现与 「${query}」相关内容",
+          "hits_stats": "找到${hits}条结果（用时 ${time} ms）"
+        }
+      }
+    };
+  </script>
+
+
+
+  
+<script src="https://npm.webcache.cn/mouse-firework@0.0.4/dist/index.umd.js"></script>
+
+  <script>
+    firework(JSON.parse('{"excludeElements":["a"],"particles":[{"shape":"circle","move":["emit"],"easing":"easeOutExpo","colors":["#ff5252","#ff7c7c","#ffafaf","#ffd0d0"],"number":20,"duration":[1200,1800],"shapeOptions":{"radius":[16,32],"alpha":[0.3,0.5]}},{"shape":"circle","move":["diffuse"],"easing":"easeOutExpo","colors":["#ff0000"],"number":1,"duration":[1200,1800],"shapeOptions":{"radius":20,"alpha":[0.2,0.5],"lineWidth":6}}]}'))
+  </script>
+
+
+
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+  <script>
+    console.log(String.raw`%c 
+ ______     ______     __     __    __     __  __    
+/\  == \   /\  ___\   /\ \   /\ "-./  \   /\ \/\ \   
+\ \  __<   \ \  __\   \ \ \  \ \ \-./\ \  \ \ \_\ \  
+ \ \_\ \_\  \ \_____\  \ \_\  \ \_\ \ \_\  \ \_____\ 
+  \/_/ /_/   \/_____/   \/_/   \/_/  \/_/   \/_____/ 
+                                                  
+`,'color: #ff5252;')
+    console.log('%c Theme.Reimu v' + '0.1.0' + ' %c https://github.com/D-Sketon/hexo-theme-reimu ', 'color: white; background: #ff5252; padding:5px 0;', 'padding:4px;border:1px solid #ff5252;')
+  </script>
+  
+
+  <!-- hexo injector body_end start -->
+<script src="/js/insert_highlight.js" data-pjax></script>
+<!-- hexo injector body_end end --></body>
+  </html>
+
